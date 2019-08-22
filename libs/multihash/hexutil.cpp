@@ -21,7 +21,8 @@ OUTCOME_CPP_DEFINE_CATEGORY(kagome::common, UnhexError, e) {
   }
 }
 
-namespace kagome::common {
+namespace kagome {
+ namespace common {
 
   std::string int_to_hex(uint64_t n,size_t fixed_width) noexcept {
     std::stringstream result;
@@ -45,28 +46,24 @@ namespace kagome::common {
     return res;
   }
 
-  std::string hex_lower(const gsl::span<const uint8_t> bytes) noexcept {
-    std::string res(bytes.size() * 2, '\x00');
-    boost::algorithm::hex_lower(bytes.begin(), bytes.end(), res.begin());
-    return res;
+  outcome::result<std::vector<uint8_t>> unhex(nonstd::string_view hex) {
+    std::vector<uint8_t> blob;
+    blob.reserve((hex.size() + 1) / 2);
+
+    try {
+      boost::algorithm::unhex(hex.begin(), hex.end(), std::back_inserter(blob));
+      return blob;
+
+    } catch (const boost::algorithm::not_enough_input &e) {
+      return UnhexError::NOT_ENOUGH_INPUT;
+
+    } catch (const boost::algorithm::non_hex_input &e) {
+      return UnhexError::NON_HEX_INPUT;
+
+    } catch (const std::exception &e) {
+      return UnhexError::UNKNOWN;
+    }
   }
 
-  // outcome::result<std::vector<uint8_t>> unhex(std::string_view hex) {
-  //   std::vector<uint8_t> blob;
-  //   blob.reserve((hex.size() + 1) / 2);
-  //
-  //   try {
-  //     boost::algorithm::unhex(hex.begin(), hex.end(), std::back_inserter(blob));
-  //     return blob;
-  //
-  //   } catch (const boost::algorithm::not_enough_input &e) {
-  //     return UnhexError::NOT_ENOUGH_INPUT;
-  //
-  //   } catch (const boost::algorithm::non_hex_input &e) {
-  //     return UnhexError::NON_HEX_INPUT;
-  //
-  //   } catch (const std::exception &e) {
-  //     return UnhexError::UNKNOWN;
-  //   }
-  // }
 }  // namespace kagome::common
+}

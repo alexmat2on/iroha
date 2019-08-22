@@ -5,11 +5,12 @@
 
 #include "uvarint.hpp"
 
-#include "common/hexutil.hpp"
+#include "hexutil.hpp"
 
 using kagome::common::hex_upper;
 
-namespace libp2p::multi {
+namespace libp2p {
+  namespace multi {
 
   UVarint::UVarint(uint64_t number) {
     bytes_.resize(8);
@@ -34,7 +35,7 @@ namespace libp2p::multi {
   UVarint::UVarint(gsl::span<const uint8_t> varint_bytes, int64_t varint_size)
       : bytes_(varint_bytes.begin(), varint_bytes.begin() + varint_size) {}
 
-  std::optional<UVarint> UVarint::create(
+  boost::optional<UVarint> UVarint::create(
       gsl::span<const uint8_t> varint_bytes) {
     if (varint_bytes.empty()) {
       return {};
@@ -62,7 +63,7 @@ namespace libp2p::multi {
   }
 
   gsl::span<const uint8_t> UVarint::toBytes() const {
-    return gsl::span(bytes_.data(), bytes_.size());
+    return gsl::span<const uint8_t>(bytes_.data(), bytes_.size());
   }
 
   std::string UVarint::toHex() const {
@@ -88,3 +89,4 @@ namespace libp2p::multi {
   }
 
 }  // namespace libp2p::multi
+}
