@@ -33,7 +33,8 @@ OUTCOME_CPP_DEFINE_CATEGORY(libp2p::multi, Multihash::Error, e) {
   }
 }
 
-namespace libp2p::multi {
+namespace libp2p {
+  namespace multi {
 
   Multihash::Multihash(HashType type, Hash hash)
       : hash_{std::move(hash)}, type_{type} {
@@ -51,7 +52,7 @@ namespace libp2p::multi {
     return Multihash{type, std::move(hash)};
   }
 
-  outcome::result<Multihash> Multihash::createFromHex(std::string_view hex) {
+  outcome::result<Multihash> Multihash::createFromHex(nonstd::string_view hex) {
     OUTCOME_TRY(buf, Buffer::fromHex(hex));
     return Multihash::createFromBuffer(buf.toVector());
   }
@@ -104,6 +105,7 @@ namespace libp2p::multi {
   }
 
 }  // namespace libp2p::multi
+}
 
 size_t std::hash<libp2p::multi::Multihash>::operator()(
     const libp2p::multi::Multihash &x) const {

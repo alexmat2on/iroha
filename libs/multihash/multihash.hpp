@@ -11,10 +11,11 @@
 
 #include "outcome/outcome.hpp"
 
-#include "common/buffer.hpp"
-#include "libp2p/multi/hash_type.hpp"
+#include "buffer.hpp"
+#include "hash_type.hpp"
 
-namespace libp2p::multi {
+namespace libp2p {
+  namespace multi {
 
   /**
    * Special format of hash used in Libp2p. Allows to differentiate between
@@ -51,7 +52,7 @@ namespace libp2p::multi {
      * @param hex - the string with hexadecimal representation of the multihash
      * @return result with the multihash in case of success
      */
-    static outcome::result<Multihash> createFromHex(std::string_view hex);
+    static outcome::result<Multihash> createFromHex(nonstd::string_view hex);
 
     /**
      * @brief Creates a multihash from a binary
@@ -113,6 +114,7 @@ namespace libp2p::multi {
   };
 
 }  // namespace libp2p::multi
+}
 
 namespace std {
   template <>

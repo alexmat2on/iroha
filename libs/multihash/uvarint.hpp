@@ -13,7 +13,8 @@
 
 #include "gsl/span"
 
-namespace libp2p::multi {
+namespace libp2p {
+  namespace multi {
 
   /**
    * A C++ wrapper for varint encoding implementation, which can be found in
@@ -44,7 +45,7 @@ namespace libp2p::multi {
      * @param varint_bytes an array of bytes, possibly representing an unsigned
      * varint
      */
-    static std::optional<UVarint> create(gsl::span<const uint8_t> varint_bytes);
+    static boost::optional<UVarint> create(gsl::span<const uint8_t> varint_bytes);
 
     /**
      * Converts a varint back to a usual unsigned integer.
@@ -86,5 +87,6 @@ namespace libp2p::multi {
   };
 
 }  // namespace libp2p::multi
+}
 
 #endif  // KAGOME_VARINT_HPP

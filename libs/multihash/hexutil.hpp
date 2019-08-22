@@ -10,9 +10,11 @@
 
 #include "gsl/span"
 
+#include "nonstd/string_view.hpp"
 #include "outcome/outcome.hpp"
 
-namespace kagome::common {
+namespace kagome {
+  namespace common {
 
   /**
    * @brief error codes for exceptions that may occur during unhexing
@@ -56,9 +58,10 @@ namespace kagome::common {
    * @see
    * https://www.boost.org/doc/libs/1_51_0/libs/algorithm/doc/html/the_boost_algorithm_library/Misc/hex.html
    */
-  // outcome::result<std::vector<uint8_t>> unhex(std::string_view hex);
+  outcome::result<std::vector<uint8_t>> unhex(nonstd::string_view hex);
 
-}  // namespace kagome::common
+}  // namespace common
+} // namespace kagome
 
 OUTCOME_HPP_DECLARE_ERROR(kagome::common, UnhexError);
 

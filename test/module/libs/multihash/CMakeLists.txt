@@ -1,0 +1,3 @@
+AddTest(multihash_test multihash_test.cpp)
+target_link_libraries(multihash_test
+multihash)
