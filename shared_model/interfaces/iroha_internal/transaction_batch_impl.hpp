@@ -31,8 +31,8 @@ namespace shared_model {
 
       bool addSignature(
           size_t number_of_tx,
-          const shared_model::crypto::Signed &signed_blob,
-          const shared_model::crypto::PublicKey &public_key) override;
+          const libp2p::multi::Multihash &signed_blob,
+          const libp2p::multi::Multihash &public_key) override;
 
      private:
       types::SharedTxsCollectionType transactions_;

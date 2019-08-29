@@ -54,11 +54,14 @@ namespace shared_model {
             return boost::none;
           }()};
 
-      SignatureSetType<proto::Signature> signatures_{[this] {
+      std::unordered_set<interface::types::MultihashSignature> signatures_{[this] {
         auto signatures = *proto_->mutable_signatures()
             | boost::adaptors::transformed(
-                  [](auto &x) { return proto::Signature(x); });
-        return SignatureSetType<proto::Signature>(signatures.begin(),
+                  [](auto &x) { return interface::types::MultihashSignature{
+                    libp2p::multi::Multihash::fromHexString(x.signature()),
+                    libp2p::multi::Multihash::fromHexString(x.public_key())
+                  }; });
+        return std::unordered_set<interface::types::MultihashSignature>(signatures.begin(),
                                                   signatures.end());
       }()};
 
@@ -108,7 +111,7 @@ namespace shared_model {
       return impl_->reduced_payload_blob_;
     }
 
-    interface::types::SignatureRangeType Transaction::signatures() const {
+    interface::types::MultihashRangeType Transaction::signatures() const {
       return impl_->signatures_;
     }
 
@@ -116,27 +119,30 @@ namespace shared_model {
       return impl_->reduced_hash_;
     }
 
-    bool Transaction::addSignature(const crypto::Signed &signed_blob,
-                                   const crypto::PublicKey &public_key) {
+    bool Transaction::addSignature(const libp2p::multi::Multihash &signed_blob,
+                                   const libp2p::multi::Multihash &public_key) {
       // if already has such signature
       if (std::find_if(impl_->signatures_.begin(),
                        impl_->signatures_.end(),
                        [&public_key](const auto &signature) {
-                         return signature.publicKey() == public_key;
+                         return signature.public_key == public_key;
                        })
           != impl_->signatures_.end()) {
         return false;
       }
 
       auto sig = impl_->proto_->add_signatures();
-      sig->set_signature(signed_blob.hex());
-      sig->set_public_key(public_key.hex());
+      sig->set_signature(signed_blob.toHex());
+      sig->set_public_key(public_key.toHex());
 
       impl_->signatures_ = [this] {
         auto signatures = *impl_->proto_->mutable_signatures()
             | boost::adaptors::transformed(
-                  [](auto &x) { return proto::Signature(x); });
-        return SignatureSetType<proto::Signature>(signatures.begin(),
+                  [](auto &x) { return interface::types::MultihashSignature{
+                    libp2p::multi::Multihash::fromHexString(x.signature()),
+                    libp2p::multi::Multihash::fromHexString(x.public_key())
+                  }; });
+        return std::unordered_set<interface::types::MultihashSignature>(signatures.begin(),
                                                   signatures.end());
       }();
 

@@ -55,6 +55,17 @@ namespace libp2p {
     static outcome::result<Multihash> createFromHex(nonstd::string_view hex);
 
     /**
+     * For Iroha compatibility
+     * @brief Creates a multihash from a string, which represents a binary
+     * buffer in hexadecimal form. The first byte denotes the hash type, the
+     * second one contains the hash length, and the following are the hash
+     * itself
+     * @param hex - the string with hexadecimal representation of the multihash
+     * @return result with the multihash in case of success
+     */
+    static Multihash fromHexString(std::string hex);
+
+    /**
      * @brief Creates a multihash from a binary
      * buffer. The first byte denotes the hash type, the
      * second one contains the hash length, and the following are the hash
@@ -79,6 +90,12 @@ namespace libp2p {
      * @return a string with hexadecimal representation of the multihash
      */
     std::string toHex() const;
+
+    /**
+     * For Iroha compatibility.
+     * @return a string with hexadecimal representation of the multihash
+     */
+    std::string toString() const;
 
     /**
      * @return a buffer with the multihash, including its type, length and hash

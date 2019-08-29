@@ -7,6 +7,7 @@
 #define IROHA_SHARED_MODEL_SIGNATURE_HPP
 
 #include "common/cloneable.hpp"
+#include "multihash/multihash.hpp"
 #include "interfaces/base/model_primitive.hpp"
 #include "utils/string_builder.hpp"
 
@@ -28,7 +29,7 @@ namespace shared_model {
       /**
        * Type of public key
        */
-      using PublicKeyType = crypto::PublicKey;
+      using PublicKeyType = libp2p::multi::Multihash;
 
       /**
        * @return public key of signatory
@@ -38,7 +39,7 @@ namespace shared_model {
       /**
        * Type of signed data
        */
-      using SignedType = crypto::Signed;
+      using SignedType = libp2p::multi::Multihash;
 
       /**
        * @return signed data

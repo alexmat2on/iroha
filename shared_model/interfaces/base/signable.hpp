@@ -37,15 +37,15 @@ namespace shared_model {
       /**
        * @return attached signatures
        */
-      virtual types::SignatureRangeType signatures() const = 0;
+      virtual types::MultihashRangeType signatures() const = 0;
 
       /**
        * Attach signature to object
        * @param signature - signature object for insertion
        * @return true, if signature was added
        */
-      virtual bool addSignature(const crypto::Signed &signed_blob,
-                                const crypto::PublicKey &public_key) = 0;
+      virtual bool addSignature(const libp2p::multi::Multihash &signed_blob,
+                                const libp2p::multi::Multihash &public_key) = 0;
 
       /**
        * @return time of creation
@@ -115,7 +115,7 @@ namespace shared_model {
          */
         template <typename T>
         size_t operator()(const T &sig) const {
-          return std::hash<std::string>{}(sig.publicKey().hex());
+          return std::hash<std::string>{}(sig.publicKey().toHex());
         }
 
         /**

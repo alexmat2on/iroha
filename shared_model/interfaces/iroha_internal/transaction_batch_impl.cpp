@@ -54,8 +54,8 @@ namespace shared_model {
 
     bool TransactionBatchImpl::addSignature(
         size_t number_of_tx,
-        const shared_model::crypto::Signed &signed_blob,
-        const shared_model::crypto::PublicKey &public_key) {
+        const libp2p::multi::Multihash &signed_blob,
+        const libp2p::multi::Multihash &public_key) {
       if (number_of_tx >= transactions_.size()) {
         return false;
       } else {

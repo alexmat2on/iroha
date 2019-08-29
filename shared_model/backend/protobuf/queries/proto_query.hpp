@@ -36,10 +36,10 @@ namespace shared_model {
       const interface::types::BlobType &payload() const override;
 
       // ------------------------| Signable override  |-------------------------
-      interface::types::SignatureRangeType signatures() const override;
+      interface::types::MultihashRangeType signatures() const override;
 
-      bool addSignature(const crypto::Signed &signed_blob,
-                        const crypto::PublicKey &public_key) override;
+      bool addSignature(const libp2p::multi::Multihash &signed_blob,
+                        const libp2p::multi::Multihash &public_key) override;
 
       const interface::types::HashType &hash() const override;
 

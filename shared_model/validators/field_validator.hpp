@@ -152,7 +152,7 @@ namespace shared_model {
 
       void validateSignatures(
           ReasonsGroupType &reason,
-          const interface::types::SignatureRangeType &signatures,
+          const interface::types::MultihashRangeType &signatures,
           const crypto::Blob &source) const;
 
       void validateQueryPayloadMeta(

@@ -51,8 +51,8 @@ namespace shared_model {
        */
       virtual bool addSignature(
           size_t number_of_tx,
-          const shared_model::crypto::Signed &signed_blob,
-          const shared_model::crypto::PublicKey &public_key) = 0;
+          const libp2p::multi::Multihash &signed_blob,
+          const libp2p::multi::Multihash &public_key) = 0;
 
       /// Pretty print the batch contents.
       std::string toString() const;

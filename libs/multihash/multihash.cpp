@@ -57,6 +57,13 @@ namespace libp2p {
     return Multihash::createFromBuffer(buf.toVector());
   }
 
+  Multihash Multihash::fromHexString(std::string hex) {
+    // OUTCOME_TRY(buf, Buffer::fromHex(hex));
+    nonstd::string_view hexview(hex);
+    kagome::common::Buffer buf = Buffer::fromHex(hexview).value();
+    return Multihash::createFromBuffer(buf.toVector()).value();
+  }
+
   outcome::result<Multihash> Multihash::createFromBuffer(
       gsl::span<const uint8_t> b) {
     if (b.size() < kHeaderSize) {
@@ -90,6 +97,10 @@ namespace libp2p {
 
   std::string Multihash::toHex() const {
     return data_.toHex();
+  }
+
+  std::string Multihash::toString() const {
+    return std::string("Multihash [") + data_.toHex() + "]";
   }
 
   const Buffer &Multihash::toBuffer() const {

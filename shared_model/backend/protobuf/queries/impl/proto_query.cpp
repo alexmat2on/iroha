@@ -69,10 +69,13 @@ namespace shared_model {
 
       interface::types::BlobType payload_{makeBlob(proto_.payload())};
 
-      SignatureSetType<proto::Signature> signatures_{[this] {
-        SignatureSetType<proto::Signature> set;
+      std::unordered_set<interface::types::MultihashSignature> signatures_{[this] {
+        std::unordered_set<interface::types::MultihashSignature> set;
         if (proto_.has_signature()) {
-          set.emplace(proto_.signature());
+          set.emplace(interface::types::MultihashSignature {
+            libp2p::multi::Multihash::fromHexString(proto_.signature().signature()),
+            libp2p::multi::Multihash::fromHexString(proto_.signature().public_key())}
+          );
         }
         return set;
       }()};
@@ -112,22 +115,27 @@ namespace shared_model {
       return impl_->payload_;
     }
 
-    interface::types::SignatureRangeType Query::signatures() const {
+    interface::types::MultihashRangeType Query::signatures() const {
       return impl_->signatures_;
     }
 
-    bool Query::addSignature(const crypto::Signed &signed_blob,
-                             const crypto::PublicKey &public_key) {
+    bool Query::addSignature(const libp2p::multi::Multihash &signed_blob,
+                             const libp2p::multi::Multihash &public_key) {
       if (impl_->proto_.has_signature()) {
         return false;
       }
 
       auto sig = impl_->proto_.mutable_signature();
-      sig->set_signature(signed_blob.hex());
-      sig->set_public_key(public_key.hex());
+      sig->set_signature(signed_blob.toHex());
+      sig->set_public_key(public_key.toHex());
 
       impl_->signatures_ =
-          SignatureSetType<proto::Signature>{proto::Signature{*sig}};
+          std::unordered_set<interface::types::MultihashSignature>{
+            interface::types::MultihashSignature{
+              libp2p::multi::Multihash::fromHexString(sig->signature()),
+              libp2p::multi::Multihash::fromHexString(sig->public_key())
+            }
+          };
       return true;
     }
 

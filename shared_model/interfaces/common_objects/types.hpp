@@ -13,6 +13,8 @@
 #include <string>
 #include <vector>
 
+#include "multihash/multihash.hpp"
+
 namespace shared_model {
 
   namespace crypto {

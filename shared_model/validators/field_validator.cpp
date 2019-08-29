@@ -318,25 +318,25 @@ namespace shared_model {
 
     void FieldValidator::validateSignatures(
         ReasonsGroupType &reason,
-        const interface::types::SignatureRangeType &signatures,
+        const interface::types::MultihashRangeType &signatures,
         const crypto::Blob &source) const {
       if (boost::empty(signatures)) {
         reason.second.emplace_back("Signatures cannot be empty");
       }
       for (const auto &signature : signatures) {
-        const auto &sign = signature.signedData();
-        const auto &pkey = signature.publicKey();
+        const auto &sign = signature.signature;
+        const auto &pkey = signature.public_key;
         bool is_valid = true;
 
-        if (sign.blob().size() != signature_size) {
+        if (sign.getHash().size() != signature_size) {
           reason.second.push_back(
-              (boost::format("Invalid signature: %s") % sign.hex()).str());
+              (boost::format("Invalid signature: %s") % sign.toHex()).str());
           is_valid = false;
         }
 
-        if (pkey.blob().size() != public_key_size) {
+        if (pkey.getHash().size() != public_key_size) {
           reason.second.push_back(
-              (boost::format("Invalid pubkey: %s") % pkey.hex()).str());
+              (boost::format("Invalid pubkey: %s") % pkey.toHex()).str());
           is_valid = false;
         }
 
@@ -344,7 +344,7 @@ namespace shared_model {
             && not shared_model::crypto::CryptoVerifier<>::verify(
                    sign, source, pkey)) {
           reason.second.push_back((boost::format("Wrong signature [%s;%s]")
-                                   % sign.hex() % pkey.hex())
+                                   % sign.toHex() % pkey.toHex())
                                       .str());
         }
       }

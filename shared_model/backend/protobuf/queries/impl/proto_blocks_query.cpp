@@ -15,9 +15,11 @@ namespace shared_model {
           blob_{makeBlob(*proto_)},
           payload_{makeBlob(proto_->meta())},
           signatures_{[this] {
-            SignatureSetType<proto::Signature> set;
+            std::unordered_set<interface::types::MultihashSignature> set;
             if (proto_->has_signature()) {
-              set.emplace(proto_->signature());
+              set.emplace(interface::types::MultihashSignature {
+                libp2p::multi::Multihash::fromHexString(proto_->signature().signature()),
+                libp2p::multi::Multihash::fromHexString(proto_->signature().public_key())});
             }
             return set;
           }()},
@@ -49,21 +51,23 @@ namespace shared_model {
       return payload_;
     }
 
-    interface::types::SignatureRangeType BlocksQuery::signatures() const {
+    interface::types::MultihashRangeType BlocksQuery::signatures() const {
       return signatures_;
     }
 
-    bool BlocksQuery::addSignature(const crypto::Signed &signed_blob,
-                                   const crypto::PublicKey &public_key) {
+    bool BlocksQuery::addSignature(const libp2p::multi::Multihash &signed_blob,
+                                   const libp2p::multi::Multihash &public_key) {
       if (proto_->has_signature()) {
         return false;
       }
 
       auto sig = proto_->mutable_signature();
-      sig->set_signature(signed_blob.hex());
-      sig->set_public_key(public_key.hex());
+      sig->set_signature(signed_blob.toHex());
+      sig->set_public_key(public_key.toHex());
       // TODO: nickaleks IR-120 12.12.2018 remove set
-      signatures_.emplace(proto_->signature());
+      signatures_.emplace(interface::types::MultihashSignature {
+        libp2p::multi::Multihash::fromHexString(proto_->signature().signature()),
+        libp2p::multi::Multihash::fromHexString(proto_->signature().public_key())});
       return true;
     }
 
