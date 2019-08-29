@@ -14,7 +14,7 @@ namespace libp2p {
     sha256 = 0x12,
     sha512 = 0x13,
     blake2s128 = 0xb250,
-    blake2s256 = 0xb260,    
+    blake2s256 = 0xb260,
 ed25519pubsha2 = 0xed13,
 ed25519pubsha3 = 0xed14,
 ed25519sigsha2 = 0xef13,
