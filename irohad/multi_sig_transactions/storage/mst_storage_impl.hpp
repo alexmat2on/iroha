@@ -56,7 +56,7 @@ namespace iroha {
     const CompleterType completer_;
     std::unordered_map<shared_model::crypto::PublicKey,
                        MstState,
-                       iroha::model::BlobHasher>
+                       std::hash<libp2p::multi::Multihash>>
         peer_states_;
     MstState own_state_;
 

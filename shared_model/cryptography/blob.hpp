@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 
+#include "multihash/multihash.hpp"
 #include "common/cloneable.hpp"
 #include "interfaces/base/model_primitive.hpp"
 
@@ -17,6 +18,7 @@ namespace shared_model {
 
     class Blob;
     std::string toBinaryString(const Blob &b);
+    std::string toBinaryString(const libp2p::multi::Multihash &mh);
 
     /**
      * Blob class present user-friendly blob for working with low-level

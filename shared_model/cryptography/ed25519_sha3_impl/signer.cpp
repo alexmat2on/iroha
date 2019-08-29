@@ -14,9 +14,9 @@ namespace shared_model {
       return Signed(
           iroha::sign(
               iroha::sha3_256(crypto::toBinaryString(blob)).to_string(),
-              iroha::pubkey_t::from_string(toBinaryString(keypair.publicKey())),
+              iroha::pubkey_t::from_string(keypair.publicKey().getHash().toByteString()),
               iroha::privkey_t::from_string(
-                  toBinaryString(keypair.privateKey())))
+                  keypair.privateKey().getHash().toByteString()))
               .to_string());
     }
   }  // namespace crypto

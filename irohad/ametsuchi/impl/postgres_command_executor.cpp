@@ -1480,7 +1480,7 @@ namespace iroha {
         bool do_validation) {
       auto &account_name = command.accountName();
       auto &domain_id = command.domainId();
-      auto &pubkey = command.pubkey().hex();
+      auto pubkey = command.pubkey().hex();
       shared_model::interface::types::AccountIdType account_id =
           account_name + "@" + domain_id;
 
@@ -1613,7 +1613,7 @@ namespace iroha {
         const shared_model::interface::types::AccountIdType &creator_account_id,
         bool do_validation) {
       auto &account_id = command.accountId();
-      auto &pubkey = command.pubkey().hex();
+      auto pubkey = command.pubkey().hex();
 
       StatementExecutor executor(remove_signatory_statements_,
                                  do_validation,

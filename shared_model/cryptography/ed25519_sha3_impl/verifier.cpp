@@ -14,8 +14,8 @@ namespace shared_model {
                           const PublicKey &publicKey) {
       return iroha::verify(
           iroha::sha3_256(crypto::toBinaryString(orig)).to_string(),
-          iroha::pubkey_t::from_string(toBinaryString(publicKey)),
-          iroha::sig_t::from_string(toBinaryString(signedData)));
+          iroha::pubkey_t::from_string(publicKey.getHash().toByteString()),
+          iroha::sig_t::from_string(signedData.getHash().toByteString()));
     }
   }  // namespace crypto
 }  // namespace shared_model

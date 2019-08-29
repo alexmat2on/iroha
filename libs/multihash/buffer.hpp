@@ -198,6 +198,11 @@ namespace kagome {
     std::string toHex() const;
 
     /**
+     * bytestring
+     */
+    std::string toByteString() const;
+
+    /**
      * Check if this buffer is empty
      * @return true, if buffer is empty, false otherwise
      */

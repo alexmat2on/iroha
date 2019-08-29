@@ -17,4 +17,5 @@ target_link_libraries(shared_model_cryptography_model
     shared_model_utils
     boost
     common
+    multihash
     )

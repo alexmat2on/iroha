@@ -56,10 +56,10 @@ namespace iroha {
           if (vote.hash.block_signature) {
             auto block_signature =
                 pb_vote.mutable_hash()->mutable_block_signature();
-            block_signature->set_signature(shared_model::crypto::toBinaryString(
-                vote.hash.block_signature->signedData()));
-            block_signature->set_pubkey(shared_model::crypto::toBinaryString(
-                vote.hash.block_signature->publicKey()));
+            block_signature->set_signature(
+                vote.hash.block_signature->signedData().getHash().toByteString());
+            block_signature->set_pubkey(
+                vote.hash.block_signature->publicKey().getHash().toByteString());
           }
 
           return pb_vote;
@@ -71,18 +71,18 @@ namespace iroha {
           if (vote.hash.block_signature) {
             auto block_signature =
                 pb_vote.mutable_hash()->mutable_block_signature();
-            block_signature->set_signature(shared_model::crypto::toBinaryString(
-                vote.hash.block_signature->signedData()));
-            block_signature->set_pubkey(shared_model::crypto::toBinaryString(
-                vote.hash.block_signature->publicKey()));
+            block_signature->set_signature(
+                vote.hash.block_signature->signedData().getHash().toByteString());
+            block_signature->set_pubkey(
+                vote.hash.block_signature->publicKey().getHash().toByteString());
           }
 
           auto signature = pb_vote.mutable_signature();
           const auto &sig = *vote.signature;
           signature->set_signature(
-              shared_model::crypto::toBinaryString(sig.signedData()));
+              sig.signedData().getHash().toByteString());
           signature->set_pubkey(
-              shared_model::crypto::toBinaryString(sig.publicKey()));
+              sig.publicKey().getHash().toByteString());
 
           return pb_vote;
         }

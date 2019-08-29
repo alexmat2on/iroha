@@ -39,6 +39,10 @@ namespace kagome {
     return hex_upper(data_);
   }
 
+  std::string Buffer::toByteString() const {
+    return std::string(begin(), end());
+  }
+
   bool Buffer::empty() const {
     return data_.empty();
   }
