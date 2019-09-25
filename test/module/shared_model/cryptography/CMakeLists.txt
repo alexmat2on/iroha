@@ -13,6 +13,7 @@ target_link_libraries(crypto_usage_test
         shared_model_default_builders
         shared_model_cryptography
         schema
+        multihash
         )
 
 addtest(security_signatures_test security_signatures_test.cpp)

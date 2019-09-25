@@ -178,7 +178,7 @@ TEST_F(RemoveSignatory, NonExistentUser) {
  * @when execute tx with RemoveSignatory with invalid public key
  * @then the tx is stateless invalid
  */
-TEST_F(RemoveSignatory, InvalidKey) {
+TEST_F(RemoveSignatory, DISABLED_InvalidKey) {
   IntegrationTestFramework(1)
       .setInitialState(kAdminKeypair)
       .sendTxAwait(makeFirstUser(), CHECK_TXS_QUANTITY(1))
