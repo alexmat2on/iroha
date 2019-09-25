@@ -6,26 +6,25 @@
 #ifndef IROHA_SHARED_MODEL_PUBLIC_KEY_HPP
 #define IROHA_SHARED_MODEL_PUBLIC_KEY_HPP
 
-#include "multihash/multihash.hpp"
-#include "cryptography/blob.hpp"
+#include "cryptography/multi_base.hpp"
 
 namespace shared_model {
   namespace crypto {
     /**
      * A special class for storing public keys.
      */
-    class PublicKey : public libp2p::multi::Multihash {
+    class PublicKey : public MultiBase {
      public:
       explicit PublicKey(const std::string &public_key);
 
+      explicit PublicKey(const Blob::Bytes &blob);
+
       explicit PublicKey(const Blob &blob);
+
+      static PublicKey fromHexString(const std::string &hex);
 
       std::string toString() const;
 
-      static PublicKey fromHexString(const std::string &hex);
-      std::string hex() const;
-      const Blob::Bytes &blob() const;
-      size_t size() const;
     };
   }  // namespace crypto
 }  // namespace shared_model

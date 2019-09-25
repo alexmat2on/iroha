@@ -63,7 +63,12 @@ namespace libp2p {
       return Error::INPUT_TOO_SHORT;
     }
 
-    UVarint varint(b);
+    auto opt_varint = UVarint::create(b);
+    if (!opt_varint) {
+      return Error::INCONSISTENT_LENGTH;
+    }
+
+    auto &varint = *opt_varint; 
 
     const auto type = static_cast<HashType>(varint.toUInt64());
     uint8_t length = b[varint.size()];

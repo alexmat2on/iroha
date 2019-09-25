@@ -7,6 +7,8 @@
 #define IROHA_CRYPTO_VERIFIER_HPP
 
 #include "cryptography/crypto_provider/crypto_defaults.hpp"
+#include "cryptography/ed25519_sha3_impl/crypto_provider.hpp"
+#include "cryptography/ed25519_ursa_impl/crypto_provider.hpp"
 
 namespace shared_model {
   namespace crypto {
@@ -20,7 +22,6 @@ namespace shared_model {
      * signatures
      * @tparam Algorithm - cryptographic algorithm for verification
      */
-    template <typename Algorithm = DefaultCryptoAlgorithmType>
     class CryptoVerifier {
      public:
       /**
@@ -33,7 +34,21 @@ namespace shared_model {
       static bool verify(const Signed &signedData,
                          const Blob &source,
                          const PublicKey &pubKey) {
-        return Algorithm::verify(signedData, source, pubKey);
+        const auto pub_key_type = pubKey.getType();
+        const auto signed_type = signedData.getType();
+
+        if (
+          pub_key_type == libp2p::multi::HashType::ed25519pubsha3 &&
+          signed_type == libp2p::multi::HashType::ed25519sigsha3) {
+          return CryptoProviderEd25519Sha3::verify(signedData, source, pubKey);
+        } else if (
+          pub_key_type == libp2p::multi::HashType::ed25519pubsha2 &&
+          signed_type == libp2p::multi::HashType::ed25519sigsha2) {
+          return CryptoProviderEd25519Ursa::verify(signedData, source, pubKey);
+        }
+        else {
+          return false;
+        }
       }
 
       /// close constructor for forbidding instantiation

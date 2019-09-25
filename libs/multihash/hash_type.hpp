@@ -18,13 +18,11 @@ namespace libp2p {
     blake2s128 = 0xb250,
     blake2s256 = 0xb260,
     ed25519pubsha2 = 0xed13,
-ed25519pubsha3 = 0xed14,
-ed25519privsha3 = 0xed15,
-ed25519privsha2 = 0xed16,
-ed25519sigsha2 = 0xef13,
-ed25519sigsha3 = 0xef14
+    ed25519pubsha3 = 0xed14,
+    ed25519sigsha2 = 0xef13,
+    ed25519sigsha3 = 0xef14
   };
-}  // namespace libp2p::multi
+  }  // namespace libp2p::multi
 }
 
 #endif  // KAGOME_HASH_TYPE_HPP

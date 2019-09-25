@@ -6,7 +6,6 @@
 #ifndef IROHA_SHARED_MODEL_PRIVATE_KEY_HPP
 #define IROHA_SHARED_MODEL_PRIVATE_KEY_HPP
 
-#include "multihash/multihash.hpp"
 #include "cryptography/blob.hpp"
 
 namespace shared_model {
@@ -14,18 +13,13 @@ namespace shared_model {
     /**
      * A special class for storing private keys.
      */
-    class PrivateKey : public libp2p::multi::Multihash {
+    class PrivateKey : public Blob {
      public:
       explicit PrivateKey(const std::string &private_key);
 
       explicit PrivateKey(const Blob &blob);
 
-      std::string toString() const;
-
-      static PrivateKey fromHexString(const std::string &hex);
-      std::string hex() const;
-      const Blob::Bytes &blob() const;
-      size_t size() const;
+      std::string toString() const override;
     };
   }  // namespace crypto
 }  // namespace shared_model

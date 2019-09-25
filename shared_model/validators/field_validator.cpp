@@ -339,7 +339,7 @@ namespace shared_model {
         }
 
         if (is_valid
-            && not shared_model::crypto::CryptoVerifier<>::verify(
+            && not shared_model::crypto::CryptoVerifier::verify(
                    sign, source, pkey)) {
           reason.second.push_back((boost::format("Wrong signature [%s;%s]")
                                    % sign.hex() % pkey.hex())
