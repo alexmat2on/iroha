@@ -197,9 +197,7 @@ find_package(ed25519)
 ###################################
 #               ursa              #
 ###################################
-if(USE_LIBURSA)
-  find_package(ursa)
-endif()
+find_package(ursa)
 
 ###################################
 #              fmt                #

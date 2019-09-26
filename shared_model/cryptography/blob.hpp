@@ -80,6 +80,7 @@ namespace shared_model {
       std::string hex_;
     };
 
+    std::string toBinaryString(const Blob::Bytes &b);
   }  // namespace crypto
 }  // namespace shared_model
 #endif  // IROHA_SHARED_MODEL_BLOB_HPP
