@@ -22,10 +22,6 @@ namespace shared_model {
       return mh.toBuffer().toByteString();
     }
 
-    // std::string toBinaryString(const libp2p::multi::Multihash &mh) {
-    //   return mh.getHash().toByteString();
-    // }
-
     Blob::Blob(const std::string &blob)
         : Blob(Bytes(blob.begin(), blob.end())) {}
 

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#include "cryptography/ed25519_sha3_impl/crypto_provider.hpp"
 #include "cryptography/multi_base.hpp"
 #include "common/byteutils.hpp"
 #include "multihash/hash_type.hpp"
@@ -16,9 +17,13 @@ namespace shared_model {
 
     MultiBase::MultiBase(libp2p::multi::HashType hash_type, const Blob::Bytes &multi_blob)
         : libp2p::multi::Multihash([&]{
-          auto result = libp2p::multi::Multihash::createFromBuffer(kagome::common::Buffer{multi_blob});
-          if (result) {
-            return result.value();
+
+          if (!((hash_type == libp2p::multi::HashType::ed25519pubsha3 && multi_blob.size() == shared_model::crypto::CryptoProviderEd25519Sha3::kPublicKeyLength) ||
+          (hash_type == libp2p::multi::HashType::ed25519sigsha3 && multi_blob.size() == shared_model::crypto::CryptoProviderEd25519Sha3::kSignatureLength))) {
+            auto result = libp2p::multi::Multihash::createFromBuffer(kagome::common::Buffer{multi_blob});
+            if (result) {
+              return result.value();
+            }
           }
 
           return libp2p::multi::Multihash::create(
