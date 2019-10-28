@@ -15,6 +15,22 @@ using namespace shared_model::crypto;
 
 using iroha::operator|;
 
+namespace {
+  template<typename T>
+  auto execute(const boost::optional<std::string> &crypto_algorithm_type, T function) {
+    if (!crypto_algorithm_type_ || crypto_algorithm_type_.value() == "iroha") {
+      crypto_signer_ =
+          std::make_shared<shared_model::crypto::CryptoModelSigner<>>(keypair);
+    } else if (crypto_algorithm_type_.value() == "ursa") {
+      crypto_signer_ =
+          std::make_shared<shared_model::crypto::CryptoModelSigner<shared_model::crypto::CryptoSigner<shared_model::crypto::CryptoProviderEd25519Ursa>>>(keypair);
+    } else {
+      // return iroha::expected::makeError<std::string>(
+      //     "Unknown crypto algorithm type.");
+    }
+  }
+}
+
 namespace iroha {
   /**
    * Function for the key encryption via XOR
@@ -45,8 +61,10 @@ namespace iroha {
   KeysManagerImpl::KeysManagerImpl(
       const std::string &account_id,
       const boost::filesystem::path &path_to_keypair,
-      logger::LoggerPtr log)
-      : path_to_keypair_(path_to_keypair),
+      logger::LoggerPtr log,
+      const boost::optional<std::string> &crypto_algorithm_type)
+      : crypto_algorithm_type_(crypto_algorithm_type),
+        path_to_keypair_(path_to_keypair),
         account_id_(account_id),
         log_(std::move(log)) {}
 
@@ -56,8 +74,9 @@ namespace iroha {
    * account_id.
    */
   KeysManagerImpl::KeysManagerImpl(const std::string account_id,
-                                   logger::LoggerPtr log)
-      : KeysManagerImpl(account_id, "", std::move(log)) {}
+                                   logger::LoggerPtr log,
+                                   const boost::optional<std::string> &crypto_algorithm_type)
+      : KeysManagerImpl(account_id, "", std::move(log), crypto_algorithm_type) {}
 
   bool KeysManagerImpl::validate(const Keypair &keypair) const {
     try {

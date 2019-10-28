@@ -39,6 +39,7 @@ struct IrohadConfig {
   // TODO: block_store_path is now optional, change docs IR-576
   // luckychess 29.06.2019
   boost::optional<std::string> block_store_path;
+  boost::optional<std::string> crypto_algorithm_type;
   uint16_t torii_port;
   boost::optional<iroha::torii::TlsParams> torii_tls_params;
   boost::optional<InterPeerTls> inter_peer_tls;

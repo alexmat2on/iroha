@@ -5,7 +5,7 @@
 
 
 add_library(keys_manager
-    keys_manager_impl.cpp
+    keys_manager_impl.hpp
     )
 
 target_link_libraries(keys_manager

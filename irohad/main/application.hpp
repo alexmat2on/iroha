@@ -130,7 +130,8 @@ class Irohad {
          const boost::optional<iroha::torii::TlsParams> &torii_tls_params =
              boost::none,
          boost::optional<IrohadConfig::InterPeerTls> inter_peer_tls_config =
-             boost::none);
+             boost::none,
+         const boost::optional<std::string> &crypto_algorithm_type = boost::none);
 
   /**
    * Initialization of whole objects in system
@@ -217,6 +218,7 @@ class Irohad {
 
   // constructor dependencies
   const boost::optional<std::string> block_store_dir_;
+  const boost::optional<std::string> crypto_algorithm_type_;
   const std::string listen_ip_;
   size_t torii_port_;
   boost::optional<iroha::torii::TlsParams> torii_tls_params_;

@@ -47,7 +47,7 @@ namespace config_members {
   extern const char *Address;
   extern const char *PublicKey;
   extern const char *TlsCertificatePath;
-
+  extern const char *CryptoAlgorithmType;
 }  // namespace config_members
 
 #endif  // IROHA_CONF_LITERALS_HPP

@@ -23,6 +23,7 @@
 #include "common/bind.hpp"
 #include "consensus/yac/consistency_model.hpp"
 #include "cryptography/crypto_provider/crypto_model_signer.hpp"
+#include "cryptography/ed25519_ursa_impl/crypto_provider.hpp"
 #include "generator/generator.hpp"
 #include "interfaces/iroha_internal/transaction_batch_factory_impl.hpp"
 #include "interfaces/iroha_internal/transaction_batch_parser_impl.hpp"
@@ -103,8 +104,10 @@ Irohad::Irohad(
     const boost::optional<GossipPropagationStrategyParams>
         &opt_mst_gossip_params,
     const boost::optional<iroha::torii::TlsParams> &torii_tls_params,
-    boost::optional<IrohadConfig::InterPeerTls> inter_peer_tls_config)
+    boost::optional<IrohadConfig::InterPeerTls> inter_peer_tls_config,
+    const boost::optional<std::string> &crypto_algorithm_type)
     : block_store_dir_(block_store_dir),
+      crypto_algorithm_type_(crypto_algorithm_type),
       listen_ip_(listen_ip),
       torii_port_(torii_port),
       torii_tls_params_(torii_tls_params),
@@ -437,8 +440,16 @@ Irohad::RunResult Irohad::initPeerCertProvider() {
  * Initializing crypto provider
  */
 Irohad::RunResult Irohad::initCryptoProvider() {
-  crypto_signer_ =
-      std::make_shared<shared_model::crypto::CryptoModelSigner<>>(keypair);
+  if (!crypto_algorithm_type_ || crypto_algorithm_type_.value() == "iroha") {
+    crypto_signer_ =
+        std::make_shared<shared_model::crypto::CryptoModelSigner<>>(keypair);
+  } else if (crypto_algorithm_type_.value() == "ursa") {
+    crypto_signer_ =
+        std::make_shared<shared_model::crypto::CryptoModelSigner<shared_model::crypto::CryptoSigner<shared_model::crypto::CryptoProviderEd25519Ursa>>>(keypair);
+  } else {
+    return iroha::expected::makeError<std::string>(
+        "Unknown crypto algorithm type.");
+  }
 
   log_->info("[Init] => crypto provider");
   return {};

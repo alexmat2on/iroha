@@ -435,6 +435,7 @@ inline void JsonDeserializerImpl::getVal<IrohadConfig>(
                path + " Irohad config top element must be an object.");
   const auto obj = src.GetObject();
   getValByKey(path, dest.block_store_path, obj, config_members::BlockStorePath);
+  getValByKey(path, dest.crypto_algorithm_type, obj, config_members::CryptoAlgorithmType);
   getValByKey(path, dest.torii_port, obj, config_members::ToriiPort);
   getValByKey(path, dest.torii_tls_params, obj, config_members::ToriiTlsParams);
   getValByKey(path, dest.inter_peer_tls, obj, config_members::InterPeerTls);
