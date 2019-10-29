@@ -42,15 +42,15 @@ class KeyManager : public ::testing::Test {
       / boost::filesystem::unique_path();
   const std::string filepath =
       (test_dir / boost::filesystem::unique_path()).string();
-  const path pub_key_path = filepath + KeysManagerImpl::kPublicKeyExtension;
-  const path pri_key_path = filepath + KeysManagerImpl::kPrivateKeyExtension;
+  const path pub_key_path = filepath + KeysManagerImpl<DefaultCryptoAlgorithmType>::kPublicKeyExtension;
+  const path pri_key_path = filepath + KeysManagerImpl<DefaultCryptoAlgorithmType>::kPrivateKeyExtension;
 
   Keypair keypair = DefaultCryptoAlgorithmType::generateKeypair();
   const std::string pubkey = keypair.publicKey().hex();
   const std::string prikey = keypair.privateKey().hex();
 
   const logger::LoggerPtr kKeysManagerLogger = getTestLogger("KeysManager");
-  KeysManagerImpl manager = KeysManagerImpl(filepath, kKeysManagerLogger);
+  KeysManagerImpl<DefaultCryptoAlgorithmType> manager{filepath, kKeysManagerLogger};
   const std::string passphrase = "test";
   const std::string nonexistent = (boost::filesystem::temp_directory_path()
                                    / boost::filesystem::unique_path())
@@ -130,9 +130,8 @@ TEST_F(KeyManager, LoadInaccessiblePrikey) {
 }
 
 TEST_F(KeyManager, CreateKeypairInNonexistentDir) {
-  KeysManagerImpl manager =
-      KeysManagerImpl(boost::filesystem::unique_path().string(),
+  KeysManagerImpl<DefaultCryptoAlgorithmType> manager{boost::filesystem::unique_path().string(),
                       nonexistent,
-                      kKeysManagerLogger);
+                      kKeysManagerLogger};
   ASSERT_FALSE(manager.createKeys(passphrase));
 }

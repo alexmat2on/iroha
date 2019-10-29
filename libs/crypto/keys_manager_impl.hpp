@@ -51,6 +51,7 @@ namespace iroha {
    */
   static constexpr auto decrypt = encrypt<Blob::Bytes>;
 
+  template <typename T>
   class KeysManagerImpl : public KeysManager {
    public:
     /**
@@ -62,10 +63,8 @@ namespace iroha {
      */
     KeysManagerImpl(const std::string &account_id,
                     const boost::filesystem::path &path_to_keypair,
-                    logger::LoggerPtr log,
-                    boost::optional<std::string> crypto_algorithm_type = boost::none)
-                    : crypto_algorithm_type_(crypto_algorithm_type),
-                      path_to_keypair_(path_to_keypair),
+                    logger::LoggerPtr log)
+                    : path_to_keypair_(path_to_keypair),
                       account_id_(account_id),
                       log_(std::move(log)) {}
 
@@ -74,15 +73,15 @@ namespace iroha {
      * @param account_id - fully qualified account id, e.g. admin@test
      * @param log to print progress
      */
-    KeysManagerImpl(const std::string account_id, logger::LoggerPtr log, boost::optional<std::string> crypto_algorithm_type = boost::none)
-    : KeysManagerImpl(account_id, "", std::move(log), crypto_algorithm_type) {}
+    KeysManagerImpl(const std::string account_id, logger::LoggerPtr log)
+    : KeysManagerImpl(account_id, "", std::move(log)) {}
 
     bool createKeys() override {
       return createKeys("");
     }
 
     bool createKeys(const std::string &pass_phrase) override {
-      Keypair keypair = DefaultCryptoAlgorithmType::generateKeypair();
+      Keypair keypair = T::generateKeypair();
 
       auto pub = keypair.publicKey().hex();
       auto priv = bytestringToHexstring(
@@ -111,17 +110,17 @@ namespace iroha {
                              pass_phrase)));
 
       if (keypair.publicKey().size()
-              != DefaultCryptoAlgorithmType::kPublicKeyLength
+              != T::kPublicKeyLength
           or keypair.privateKey().size()
-              != DefaultCryptoAlgorithmType::kPrivateKeyLength) {
+              != T::kPrivateKeyLength) {
         return boost::none;
       }
 
       return validate(keypair) ? boost::make_optional(keypair) : boost::none;
     }
 
-    static const std::string kPublicKeyExtension = ".pub";
-    static const std::string kPrivateKeyExtension = ".priv";
+    static const std::string kPublicKeyExtension;
+    static const std::string kPrivateKeyExtension;
 
    private:
     /**
@@ -132,8 +131,8 @@ namespace iroha {
     bool validate(const shared_model::crypto::Keypair &keypair) const {
       try {
         auto test = Blob("12345");
-        auto sig = DefaultCryptoAlgorithmType::sign(test, keypair);
-        if (not DefaultCryptoAlgorithmType::verify(
+        auto sig = T::sign(test, keypair);
+        if (not T::verify(
                 sig, test, keypair.publicKey())) {
           log_->error("key validation failed");
           return false;
@@ -184,13 +183,16 @@ namespace iroha {
       return pub_file.good() && priv_file.good();
     }
 
-    boost::optional<std::string> crypto_algorithm_type_;
     boost::filesystem::path path_to_keypair_;
     std::string account_id_;
     logger::LoggerPtr log_;
   };
 
-  const std::string KeysManagerImpl::kPublicKeyExtension;// = ".pub";
-  const std::string KeysManagerImpl::kPrivateKeyExtension;// = ".priv";
+  template <typename T>
+  const std::string KeysManagerImpl<T>::kPublicKeyExtension = ".pub";
+
+  template <typename T>
+  const std::string KeysManagerImpl<T>::kPrivateKeyExtension = ".priv";
+
 }  // namespace iroha
 #endif  // IROHA_KEYS_MANAGER_IMPL_HPP

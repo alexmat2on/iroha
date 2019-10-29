@@ -14,6 +14,7 @@
 #include "backend/protobuf/transaction.hpp"
 #include "client.hpp"
 #include "common/result.hpp"
+#include "cryptography/crypto_provider/crypto_defaults.hpp"
 #include "converters/protobuf/json_proto_converter.hpp"
 #include "crypto/keys_manager_impl.hpp"
 #include "grpc_response_handler.hpp"
@@ -149,8 +150,7 @@ int main(int argc, char *argv[]) {
       logger->error("No account name specified");
       return EXIT_FAILURE;
     }
-    auto keysManager =
-        iroha::KeysManagerImpl(FLAGS_account_name, keys_manager_log);
+    iroha::KeysManagerImpl<DefaultCryptoAlgorithmType> keysManager(FLAGS_account_name, keys_manager_log);
     if (not(FLAGS_pass_phrase.size() == 0
                 ? keysManager.createKeys()
                 : keysManager.createKeys(FLAGS_pass_phrase))) {
@@ -222,7 +222,7 @@ int main(int argc, char *argv[]) {
       logger->error("Path {} not found.", path.string());
       return EXIT_FAILURE;
     }
-    iroha::KeysManagerImpl manager((path / FLAGS_account_name).string(),
+    iroha::KeysManagerImpl<DefaultCryptoAlgorithmType> manager((path / FLAGS_account_name).string(),
                                    keys_manager_log);
     auto keypair = FLAGS_pass_phrase.size() != 0
         ? manager.loadKeys(FLAGS_pass_phrase)

@@ -6,6 +6,7 @@
 #include "model/generators/transaction_generator.hpp"
 
 #include "crypto/keys_manager_impl.hpp"
+#include "cryptography/crypto_provider/crypto_defaults.hpp"
 #include "cryptography/ed25519_sha3_impl/internal/sha3_hash.hpp"
 #include "datetime/time.hpp"
 #include "model/commands/append_role.hpp"
@@ -38,7 +39,7 @@ namespace iroha {
         CommandGenerator command_generator;
         // Add peers
         for (size_t i = 0; i < peers_address.size(); ++i) {
-          KeysManagerImpl manager("node" + std::to_string(i),
+          KeysManagerImpl<DefaultCryptoAlgorithmType> manager("node" + std::to_string(i),
                                   keys_manager_logger);
           manager.createKeys();
           auto keypair = *std::unique_ptr<iroha::keypair_t>(
@@ -61,16 +62,16 @@ namespace iroha {
         tx.commands.push_back(
             command_generator.generateCreateAsset("coin", "test", precision));
         // Create accounts
-        KeysManagerImpl manager("admin@test", keys_manager_logger);
+        KeysManagerImpl<DefaultCryptoAlgorithmType> manager("admin@test", keys_manager_logger);
         manager.createKeys();
         auto keypair = *std::unique_ptr<iroha::keypair_t>(
             makeOldModel(*manager.loadKeys()));
         tx.commands.push_back(command_generator.generateCreateAccount(
             "admin", "test", keypair.pubkey));
-        manager = KeysManagerImpl("test@test", std::move(keys_manager_logger));
-        manager.createKeys();
+        KeysManagerImpl<DefaultCryptoAlgorithmType> test_manager("test@test", std::move(keys_manager_logger));
+        test_manager.createKeys();
         keypair = *std::unique_ptr<iroha::keypair_t>(
-            makeOldModel(*manager.loadKeys()));
+            makeOldModel(*test_manager.loadKeys()));
         tx.commands.push_back(command_generator.generateCreateAccount(
             "test", "test", keypair.pubkey));
 

@@ -14,6 +14,7 @@
 #include "common/bind.hpp"
 #include "common/irohad_version.hpp"
 #include "common/result.hpp"
+#include "cryptography/crypto_provider/crypto_defaults.hpp"
 #include "crypto/keys_manager_impl.hpp"
 #include "logger/logger.hpp"
 #include "logger/logger_manager.hpp"
@@ -166,7 +167,7 @@ int main(int argc, char *argv[]) {
   }
 
   // Reading public and private key files
-  iroha::KeysManagerImpl keysManager(
+  iroha::KeysManagerImpl<shared_model::crypto::DefaultCryptoAlgorithmType> keysManager(
       FLAGS_keypair_name, log_manager->getChild("KeysManager")->getLogger());
   auto keypair = keysManager.loadKeys();
   // Check if both keys are read properly

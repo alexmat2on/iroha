@@ -26,6 +26,7 @@
 #include "common/files.hpp"
 #include "crypto/keys_manager_impl.hpp"
 #include "cryptography/blob.hpp"
+#include "cryptography/crypto_provider/crypto_defaults.hpp"
 #include "cryptography/default_hash_provider.hpp"
 #include "framework/result_gtest_checkers.hpp"
 #include "integration/acceptance/acceptance_fixture.hpp"
@@ -418,9 +419,9 @@ class IrohadTest : public AcceptanceFixture {
   std::string db_name_;
   std::string pgopts_;
   std::string config_copy_;
-  iroha::KeysManagerImpl keys_manager_node_;
-  iroha::KeysManagerImpl keys_manager_admin_;
-  iroha::KeysManagerImpl keys_manager_testuser_;
+  iroha::KeysManagerImpl<shared_model::crypto::DefaultCryptoAlgorithmType> keys_manager_node_;
+  iroha::KeysManagerImpl<shared_model::crypto::DefaultCryptoAlgorithmType> keys_manager_admin_;
+  iroha::KeysManagerImpl<shared_model::crypto::DefaultCryptoAlgorithmType> keys_manager_testuser_;
   std::string root_ca_;
 
   logger::LoggerPtr log_;
