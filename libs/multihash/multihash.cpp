@@ -36,81 +36,82 @@ OUTCOME_CPP_DEFINE_CATEGORY(libp2p::multi, Multihash::Error, e) {
 namespace libp2p {
   namespace multi {
 
-  Multihash::Multihash(HashType type, Hash hash)
-      : hash_{std::move(hash)}, type_{type} {
-    UVarint uvarint{type};
-    data_.put(uvarint.toBytes());
-    data_.putUint8(static_cast<uint8_t>(hash_.size()));
-    data_.put(hash_.toVector());
-  }
-
-  outcome::result<Multihash> Multihash::create(HashType type, Hash hash) {
-    if (hash.size() > kMaxHashLength) {
-      return Error::INPUT_TOO_LONG;
+    Multihash::Multihash(HashType type, Hash hash)
+        : hash_{std::move(hash)}, type_{type} {
+      UVarint uvarint{type};
+      data_.put(uvarint.toBytes());
+      data_.putUint8(static_cast<uint8_t>(hash_.size()));
+      data_.put(hash_.toVector());
     }
 
-    return Multihash{type, std::move(hash)};
-  }
+    outcome::result<Multihash> Multihash::create(HashType type, Hash hash) {
+      if (hash.size() > kMaxHashLength) {
+        return Error::INPUT_TOO_LONG;
+      }
 
-  outcome::result<Multihash> Multihash::createFromHex(nonstd::string_view hex) {
-    OUTCOME_TRY(buf, Buffer::fromHex(hex));
-    return Multihash::createFromBuffer(buf.toVector());
-  }
-
-  outcome::result<Multihash> Multihash::createFromBuffer(
-      gsl::span<const uint8_t> b) {
-    if (b.size() < kHeaderSize) {
-      return Error::INPUT_TOO_SHORT;
+      return Multihash{type, std::move(hash)};
     }
 
-    auto opt_varint = UVarint::create(b);
-    if (!opt_varint) {
-      return Error::INCONSISTENT_LENGTH;
+    outcome::result<Multihash> Multihash::createFromHex(
+        const std::string &hex) {
+      OUTCOME_TRY(buf, Buffer::fromHex(hex));
+      return Multihash::createFromBuffer(buf.toVector());
     }
 
-    auto &varint = *opt_varint; 
+    outcome::result<Multihash> Multihash::createFromBuffer(
+        gsl::span<const uint8_t> b) {
+      if (b.size() < kHeaderSize) {
+        return Error::INPUT_TOO_SHORT;
+      }
 
-    const auto type = static_cast<HashType>(varint.toUInt64());
-    uint8_t length = b[varint.size()];
-    Hash hash(std::vector<uint8_t>(b.begin() + varint.size() + 1, b.end()));
+      auto opt_varint = UVarint::create(b);
+      if (!opt_varint) {
+        return Error::INCONSISTENT_LENGTH;
+      }
 
-    if (length == 0) {
-      return Error::ZERO_INPUT_LENGTH;
+      auto &varint = *opt_varint;
+
+      const auto type = static_cast<HashType>(varint.toUInt64());
+      uint8_t length = b[varint.size()];
+      Hash hash(std::vector<uint8_t>(b.begin() + varint.size() + 1, b.end()));
+
+      if (length == 0) {
+        return Error::ZERO_INPUT_LENGTH;
+      }
+
+      if (hash.size() != length) {
+        return Error::INCONSISTENT_LENGTH;
+      }
+
+      return Multihash::create(type, std::move(hash));
     }
 
-    if (hash.size() != length) {
-      return Error::INCONSISTENT_LENGTH;
+    const HashType &Multihash::getType() const {
+      return type_;
     }
 
-    return Multihash::create(type, std::move(hash));
-  }
+    const Multihash::Hash &Multihash::getHash() const {
+      return hash_;
+    }
 
-  const HashType &Multihash::getType() const {
-    return type_;
-  }
+    std::string Multihash::toHex() const {
+      return data_.toHex();
+    }
 
-  const Multihash::Hash &Multihash::getHash() const {
-    return hash_;
-  }
+    const Buffer &Multihash::toBuffer() const {
+      return data_;
+    }
 
-  std::string Multihash::toHex() const {
-    return data_.toHex();
-  }
+    bool Multihash::operator==(const Multihash &other) const {
+      return this->data_ == other.data_ && this->type_ == other.type_;
+    }
 
-  const Buffer &Multihash::toBuffer() const {
-    return data_;
-  }
+    bool Multihash::operator!=(const Multihash &other) const {
+      return !(*this == other);
+    }
 
-  bool Multihash::operator==(const Multihash &other) const {
-    return this->data_ == other.data_ && this->type_ == other.type_;
-  }
-
-  bool Multihash::operator!=(const Multihash &other) const {
-    return !(*this == other);
-  }
-
-}  // namespace libp2p::multi
-}
+  }  // namespace multi
+}  // namespace libp2p
 
 size_t std::hash<libp2p::multi::Multihash>::operator()(
     const libp2p::multi::Multihash &x) const {

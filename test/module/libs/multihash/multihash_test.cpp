@@ -17,13 +17,12 @@ using libp2p::multi::Multihash;
 using libp2p::multi::UVarint;
 
 inline std::vector<uint8_t> operator""_unhex(const char *c, size_t s) {
-  return kagome::common::unhex(nonstd::string_view(c, s)).value();
+  return kagome::common::unhex(std::string(c, s)).value();
 }
 
 /// creates a multihash instance from a hex string
 inline libp2p::multi::Multihash operator""_multihash(const char *c, size_t s) {
-  return libp2p::multi::Multihash::createFromHex(nonstd::string_view(c, s))
-      .value();
+  return libp2p::multi::Multihash::createFromHex(std::string(c, s)).value();
 }
 
 /**
