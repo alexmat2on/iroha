@@ -17,12 +17,14 @@ using libp2p::multi::Multihash;
 using libp2p::multi::UVarint;
 
 inline auto operator""_unhex(const char *c, size_t s) {
-  return Buffer{kagome::common::unhex(std::string(c, s)).value()};
+  return Buffer{*iroha::expected::resultToOptionalValue(
+      kagome::common::unhex(std::string(c, s)))};
 }
 
 /// creates a multihash instance from a hex string
 inline libp2p::multi::Multihash operator""_multihash(const char *c, size_t s) {
-  return libp2p::multi::Multihash::createFromHex(std::string(c, s)).value();
+  return *iroha::expected::resultToOptionalValue(
+      libp2p::multi::Multihash::createFromHex(std::string(c, s)));
 }
 
 /**
@@ -34,12 +36,14 @@ inline libp2p::multi::Multihash operator""_multihash(const char *c, size_t s) {
 TEST(Multihash, Create) {
   Buffer hash{2, 3, 4};
   ASSERT_NO_THROW({
-    auto m = Multihash::create(HashType::blake2s128, hash).value();
+    auto m = *iroha::expected::resultToOptionalValue(
+        Multihash::create(HashType::blake2s128, hash));
     ASSERT_EQ(m.getType(), HashType::blake2s128);
     ASSERT_EQ(m.getHash(), hash);
   });
 
-  ASSERT_FALSE(Multihash::create(HashType::blake2s128, Buffer(200, 42)))
+  ASSERT_FALSE(iroha::expected::resultToOptionalValue(
+      Multihash::create(HashType::blake2s128, Buffer(200, 42))))
       << "The multihash mustn't accept hashes of the size greater than 127";
 }
 
@@ -54,7 +58,8 @@ TEST(Multihash, FromToHex) {
   Buffer hash{2, 3, 4};
 
   ASSERT_NO_THROW({
-    auto m = Multihash::create(HashType::blake2s128, hash).value();
+    auto m = *iroha::expected::resultToOptionalValue(
+        Multihash::create(HashType::blake2s128, hash));
     UVarint var(HashType::blake2s128);
     auto hex_s = hex_upper(var.toBytes()) + "03" + hex_upper(hash.toVector());
     ASSERT_EQ(m.toHex(), hex_s);
@@ -65,11 +70,14 @@ TEST(Multihash, FromToHex) {
     ASSERT_EQ(m.toHex(), "1203020304");
   });
 
-  ASSERT_FALSE(Multihash::createFromHex("32004324234234"))
+  ASSERT_FALSE(iroha::expected::resultToOptionalValue(
+      Multihash::createFromHex("32004324234234")))
       << "The length mustn't be zero";
-  ASSERT_FALSE(Multihash::createFromHex("32034324234234"))
+  ASSERT_FALSE(iroha::expected::resultToOptionalValue(
+      Multihash::createFromHex("32034324234234")))
       << "The length must be equal to the hash size";
-  ASSERT_FALSE(Multihash::createFromHex("3204abcdefgh"))
+  ASSERT_FALSE(iroha::expected::resultToOptionalValue(
+      Multihash::createFromHex("3204abcdefgh")))
       << "The hex string is invalid";
 }
 
@@ -84,11 +92,13 @@ TEST(Multihash, FromToBuffer) {
   auto hash = "8203020304"_unhex;
 
   ASSERT_NO_THROW({
-    auto m = Multihash::createFromBuffer(hash).value();
+    auto m = *iroha::expected::resultToOptionalValue(
+        Multihash::createFromBuffer(hash));
     ASSERT_EQ(m.toBuffer(), hash);
   });
 
   Buffer v{2, 3, 1, 3};
-  ASSERT_FALSE(Multihash::createFromBuffer(v))
+  ASSERT_FALSE(
+      iroha::expected::resultToOptionalValue(Multihash::createFromBuffer(v)))
       << "Length in the header does not equal actual length";
 }

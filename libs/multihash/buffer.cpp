@@ -70,9 +70,9 @@ namespace kagome {
       return data_[index];
     }
 
-    outcome::result<Buffer> Buffer::fromHex(const std::string &hex) {
-      OUTCOME_TRY(bytes, unhex(hex));
-      return Buffer{std::move(bytes)};
+    iroha::expected::Result<Buffer, std::string> Buffer::fromHex(
+        const std::string &hex) {
+      return unhex(hex) | [](auto &&bytes) { return Buffer{std::move(bytes)}; };
     }
 
     Buffer::Buffer(std::vector<uint8_t> v) : data_(std::move(v)) {}

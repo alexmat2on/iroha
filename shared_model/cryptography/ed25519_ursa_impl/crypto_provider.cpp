@@ -29,13 +29,13 @@ namespace shared_model {
       }
 
       std::string multi_blob{(const std::string::value_type *)signature.data,
-                                signature.len};
+                             signature.len};
 
-      auto mh_signature = libp2p::multi::Multihash::create(
-          libp2p::multi::HashType::ed25519sigsha2,
-          kagome::common::Buffer{
-              std::vector<uint8_t>{multi_blob.begin(), multi_blob.end()}})
-          .value();
+      auto mh_signature = *iroha::expected::resultToOptionalValue(
+          libp2p::multi::Multihash::create(
+              libp2p::multi::HashType::ed25519sigsha2,
+              kagome::common::Buffer{
+                  std::vector<uint8_t>{multi_blob.begin(), multi_blob.end()}}));
 
       Signed result(mh_signature.toBuffer().toVector());
 
@@ -80,13 +80,13 @@ namespace shared_model {
       }
 
       std::string multi_blob{(const std::string::value_type *)public_key.data,
-                                public_key.len};
+                             public_key.len};
 
-      auto mh_pubkey = libp2p::multi::Multihash::create(
-          libp2p::multi::HashType::ed25519pubsha2,
-          kagome::common::Buffer{
-              std::vector<uint8_t>{multi_blob.begin(), multi_blob.end()}})
-          .value();
+      auto mh_pubkey = *iroha::expected::resultToOptionalValue(
+          libp2p::multi::Multihash::create(
+              libp2p::multi::HashType::ed25519pubsha2,
+              kagome::common::Buffer{
+                  std::vector<uint8_t>{multi_blob.begin(), multi_blob.end()}}));
 
       Keypair result(PublicKey(mh_pubkey.toBuffer().toVector()),
                      PrivateKey(std::string(
@@ -115,13 +115,13 @@ namespace shared_model {
       }
 
       std::string multi_blob{(const std::string::value_type *)public_key.data,
-                                public_key.len};
+                             public_key.len};
 
-      auto mh_pubkey = libp2p::multi::Multihash::create(
-          libp2p::multi::HashType::ed25519pubsha2,
-          kagome::common::Buffer{
-              std::vector<uint8_t>{multi_blob.begin(), multi_blob.end()}})
-          .value();
+      auto mh_pubkey = *iroha::expected::resultToOptionalValue(
+          libp2p::multi::Multihash::create(
+              libp2p::multi::HashType::ed25519pubsha2,
+              kagome::common::Buffer{
+                  std::vector<uint8_t>{multi_blob.begin(), multi_blob.end()}}));
 
       Keypair result(PublicKey(mh_pubkey.toBuffer().toVector()),
                      PrivateKey(std::string(

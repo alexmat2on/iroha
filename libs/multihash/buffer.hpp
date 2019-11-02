@@ -10,7 +10,7 @@
 
 #include <boost/container_hash/hash.hpp>
 #include <boost/operators.hpp>
-#include "outcome/outcome.hpp"
+#include "common/result.hpp"
 
 namespace kagome {
   namespace common {
@@ -193,7 +193,8 @@ namespace kagome {
        * @return result containing constructed buffer if input string is
        * hex-encoded string.
        */
-      static outcome::result<Buffer> fromHex(const std::string &hex);
+      static iroha::expected::Result<Buffer, std::string> fromHex(
+          const std::string &hex);
 
      private:
       std::vector<uint8_t> data_;

@@ -8,15 +8,10 @@
 
 #include <vector>
 
-#include "outcome/outcome.hpp"
+#include "common/result.hpp"
 
 namespace kagome {
   namespace common {
-
-    /**
-     * @brief error codes for exceptions that may occur during unhexing
-     */
-    enum class UnhexError { NOT_ENOUGH_INPUT = 1, NON_HEX_INPUT, UNKNOWN };
 
     /**
      * @brief Converts an integer to an uppercase hex representation
@@ -43,11 +38,10 @@ namespace kagome {
      * @see
      * https://www.boost.org/doc/libs/1_51_0/libs/algorithm/doc/html/the_boost_algorithm_library/Misc/hex.html
      */
-    outcome::result<std::vector<uint8_t>> unhex(const std::string &hex);
+    iroha::expected::Result<std::vector<uint8_t>, std::string> unhex(
+        const std::string &hex);
 
   }  // namespace common
 }  // namespace kagome
-
-OUTCOME_HPP_DECLARE_ERROR(kagome::common, UnhexError);
 
 #endif  // KAGOME_HEXUTIL_HPP

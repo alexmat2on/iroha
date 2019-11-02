@@ -9,7 +9,7 @@
 #include <cstdint>
 #include <utility>
 
-#include "outcome/outcome.hpp"
+#include "common/result.hpp"
 
 #include "buffer.hpp"
 #include "hash_type.hpp"
@@ -42,7 +42,8 @@ namespace libp2p {
        * @param hash - binary buffer with the hash
        * @return result with the multihash in case of success
        */
-      static outcome::result<Multihash> create(HashType type, Hash hash);
+      static iroha::expected::Result<Multihash, std::string> create(
+          HashType type, Hash hash);
 
       /**
        * @brief Creates a multihash from a string, which represents a binary
@@ -53,7 +54,8 @@ namespace libp2p {
        * multihash
        * @return result with the multihash in case of success
        */
-      static outcome::result<Multihash> createFromHex(const std::string &hex);
+      static iroha::expected::Result<Multihash, std::string> createFromHex(
+          const std::string &hex);
 
       /**
        * @brief Creates a multihash from a binary
@@ -63,7 +65,7 @@ namespace libp2p {
        * @param b - the buffer with the multihash
        * @return result with the multihash in case of success
        */
-      static outcome::result<Multihash> createFromBuffer(
+      static iroha::expected::Result<Multihash, std::string> createFromBuffer(
           kagome::common::Buffer b);
 
       /**
@@ -124,7 +126,5 @@ namespace std {
     size_t operator()(const libp2p::multi::Multihash &x) const;
   };
 }  // namespace std
-
-OUTCOME_HPP_DECLARE_ERROR(libp2p::multi, Multihash::Error);
 
 #endif  // IROHA_MULTIHASH_HPP
