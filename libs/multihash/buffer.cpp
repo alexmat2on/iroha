@@ -76,7 +76,6 @@ namespace kagome {
     }
 
     Buffer::Buffer(std::vector<uint8_t> v) : data_(std::move(v)) {}
-    Buffer::Buffer(gsl::span<const uint8_t> s) : data_(s.begin(), s.end()) {}
 
     const std::vector<uint8_t> &Buffer::toVector() const {
       return data_;
@@ -108,10 +107,6 @@ namespace kagome {
       return data_ == b;
     }
 
-    bool Buffer::operator==(gsl::span<const uint8_t> s) const noexcept {
-      return std::equal(data_.begin(), data_.end(), s.begin(), s.end());
-    }
-
     template <typename T>
     Buffer &Buffer::putRange(const T &begin, const T &end) {
       static_assert(sizeof(*begin) == 1);
@@ -125,10 +120,6 @@ namespace kagome {
 
     Buffer &Buffer::put(const std::vector<uint8_t> &v) {
       return putRange(v.begin(), v.end());
-    }
-
-    Buffer &Buffer::put(gsl::span<const uint8_t> s) {
-      return putRange(s.begin(), s.end());
     }
 
     Buffer &Buffer::putBytes(const uint8_t *begin, const uint8_t *end) {
@@ -158,10 +149,6 @@ namespace kagome {
     Buffer &Buffer::resize(size_t size) {
       data_.resize(size);
       return *this;
-    }
-
-    Buffer Buffer::subbuffer(size_t offset, size_t length) const {
-      return Buffer(gsl::make_span(*this).subspan(offset, length));
     }
 
     Buffer &Buffer::operator+=(const Buffer &other) noexcept {

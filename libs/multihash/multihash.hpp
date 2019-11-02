@@ -64,7 +64,7 @@ namespace libp2p {
        * @return result with the multihash in case of success
        */
       static outcome::result<Multihash> createFromBuffer(
-          gsl::span<const uint8_t> b);
+          kagome::common::Buffer b);
 
       /**
        * @return the info about hash type

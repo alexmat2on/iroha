@@ -7,7 +7,6 @@
 
 #include <boost/algorithm/hex.hpp>
 #include <boost/format.hpp>
-#include "gsl/span"
 
 OUTCOME_CPP_DEFINE_CATEGORY(kagome::common, UnhexError, e) {
   using kagome::common::UnhexError;
@@ -40,7 +39,7 @@ namespace kagome {
       return str;
     }
 
-    std::string hex_upper(const gsl::span<const uint8_t> bytes) noexcept {
+    std::string hex_upper(const std::vector<uint8_t> &bytes) noexcept {
       std::string res(bytes.size() * 2, '\x00');
       boost::algorithm::hex(bytes.begin(), bytes.end(), res.begin());
       return res;

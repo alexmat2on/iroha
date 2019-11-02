@@ -16,8 +16,8 @@ using libp2p::multi::HashType;
 using libp2p::multi::Multihash;
 using libp2p::multi::UVarint;
 
-inline std::vector<uint8_t> operator""_unhex(const char *c, size_t s) {
-  return kagome::common::unhex(std::string(c, s)).value();
+inline auto operator""_unhex(const char *c, size_t s) {
+  return Buffer{kagome::common::unhex(std::string(c, s)).value()};
 }
 
 /// creates a multihash instance from a hex string
@@ -88,7 +88,7 @@ TEST(Multihash, FromToBuffer) {
     ASSERT_EQ(m.toBuffer(), hash);
   });
 
-  std::vector<uint8_t> v{2, 3, 1, 3};
+  Buffer v{2, 3, 1, 3};
   ASSERT_FALSE(Multihash::createFromBuffer(v))
       << "Length in the header does not equal actual length";
 }

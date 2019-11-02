@@ -10,7 +10,6 @@
 
 #include <boost/container_hash/hash.hpp>
 #include <boost/operators.hpp>
-#include <gsl/span>
 #include "outcome/outcome.hpp"
 
 namespace kagome {
@@ -20,7 +19,6 @@ namespace kagome {
      * @brief Class represents arbitrary (including empty) byte buffer.
      */
     class Buffer : public boost::equality_comparable<Buffer>,
-                   public boost::equality_comparable<gsl::span<uint8_t>>,
                    public boost::equality_comparable<std::vector<uint8_t>> {
      public:
       using iterator = std::vector<uint8_t>::iterator;
@@ -42,7 +40,6 @@ namespace kagome {
        * @brief lvalue construct buffer from a byte vector
        */
       explicit Buffer(std::vector<uint8_t> v);
-      explicit Buffer(gsl::span<const uint8_t> s);
 
       Buffer(const uint8_t *begin, const uint8_t *end);
 
@@ -78,11 +75,6 @@ namespace kagome {
        * @brief Lexicographical comparison of buffer and vector of bytes
        */
       bool operator==(const std::vector<uint8_t> &b) const noexcept;
-
-      /**
-       * @brief Lexicographical comparison of buffer and vector of bytes
-       */
-      bool operator==(gsl::span<const uint8_t> s) const noexcept;
 
       /**
        * @brief Iterator, which points to begin of this buffer.
@@ -146,13 +138,6 @@ namespace kagome {
       Buffer &put(const std::vector<uint8_t> &v);
 
       /**
-       * @brief Put a sequence of bytes into byte buffer
-       * @param s arbitrary span of bytes
-       * @return this buffer, suitable for chaining.
-       */
-      Buffer &put(gsl::span<const uint8_t> s);
-
-      /**
        * @brief Put a array of bytes bounded by pointers into byte buffer
        * @param begin pointer to the array start
        *        end pointer to the address after the last element
@@ -184,12 +169,6 @@ namespace kagome {
       const std::vector<uint8_t> &toVector() const;
 
       std::vector<uint8_t> &toVector();
-
-      /**
-       * Returns a copy of a part of the buffer
-       * Works alike subspan() of gsl::span
-       */
-      Buffer subbuffer(size_t offset = 0, size_t length = -1) const;
 
       /**
        * @brief encode bytearray as hex

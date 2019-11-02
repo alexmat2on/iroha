@@ -55,16 +55,16 @@ namespace libp2p {
     outcome::result<Multihash> Multihash::createFromHex(
         const std::string &hex) {
       OUTCOME_TRY(buf, Buffer::fromHex(hex));
-      return Multihash::createFromBuffer(buf.toVector());
+      return Multihash::createFromBuffer(buf);
     }
 
     outcome::result<Multihash> Multihash::createFromBuffer(
-        gsl::span<const uint8_t> b) {
+        kagome::common::Buffer b) {
       if (b.size() < kHeaderSize) {
         return Error::INPUT_TOO_SHORT;
       }
 
-      auto opt_varint = UVarint::create(b);
+      auto opt_varint = UVarint::create(b.toVector());
       if (!opt_varint) {
         return Error::INCONSISTENT_LENGTH;
       }
