@@ -8,6 +8,8 @@
 
 #include "cryptography/blob.hpp"
 #include "cryptography/crypto_provider/crypto_defaults.hpp"
+#include "cryptography/ed25519_sha3_impl/crypto_provider.hpp"
+#include "cryptography/ed25519_ursa_impl/crypto_provider.hpp"
 #include "cryptography/keypair.hpp"
 #include "cryptography/signed.hpp"
 
@@ -28,7 +30,18 @@ namespace shared_model {
        * @return signature's blob
        */
       static Signed sign(const Blob &blob, const Keypair &keypair) {
-        return Algorithm::sign(blob, keypair);
+        const auto pub_key_type = keypair.publicKey().getType();
+
+        if (
+          pub_key_type == libp2p::multi::HashType::ed25519pubsha3) {
+          return CryptoProviderEd25519Sha3::sign(blob, keypair);
+        } else if (
+          pub_key_type == libp2p::multi::HashType::ed25519pubsha2) {
+          return CryptoProviderEd25519Ursa::sign(blob, keypair);
+        }
+        else {
+          return Signed{""};
+        }
       }
 
       /// close constructor for forbidding instantiation
