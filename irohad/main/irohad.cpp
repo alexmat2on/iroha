@@ -15,6 +15,8 @@
 #include "common/irohad_version.hpp"
 #include "common/result.hpp"
 #include "cryptography/crypto_provider/crypto_defaults.hpp"
+#include "cryptography/ed25519_ursa_impl/crypto_provider.hpp"
+#include "cryptography/ed25519_sha3_impl/crypto_provider.hpp"
 #include "crypto/keys_manager_impl.hpp"
 #include "logger/logger.hpp"
 #include "logger/logger_manager.hpp"
@@ -167,9 +169,17 @@ int main(int argc, char *argv[]) {
   }
 
   // Reading public and private key files
-  iroha::KeysManagerImpl<shared_model::crypto::DefaultCryptoAlgorithmType> keysManager(
-      FLAGS_keypair_name, log_manager->getChild("KeysManager")->getLogger());
-  auto keypair = keysManager.loadKeys();
+  boost::optional<Keypair> keypair;
+  if (!config.crypto_algorithm_type || config.crypto_algorithm_type.value() == "iroha") {
+        iroha::KeysManagerImpl<shared_model::crypto::CryptoProviderEd25519Sha3> keysManager(
+            FLAGS_keypair_name, log_manager->getChild("KeysManager")->getLogger());
+        keypair = keysManager.loadKeys();
+  } else if (config.crypto_algorithm_type.value() == "ursa") {
+    iroha::KeysManagerImpl<shared_model::crypto::CryptoProviderEd25519Ursa> keysManager(
+        FLAGS_keypair_name, log_manager->getChild("KeysManager")->getLogger());
+        keypair = keysManager.loadKeys();
+  }
+
   // Check if both keys are read properly
   if (not keypair) {
     // Abort execution if not
