@@ -39,7 +39,7 @@ namespace iroha {
         auto blob = shared_model::crypto::Blob(serialized);
         const auto &pubkey = keypair_.publicKey();
         const auto &privkey = keypair_.privateKey();
-        auto signature = shared_model::crypto::CryptoSigner<>::sign(
+        auto signature = shared_model::crypto::CryptoSigner::sign(
             blob, shared_model::crypto::Keypair(pubkey, privkey));
 
         // TODO 30.08.2018 andrei: IR-1670 Remove optional from YAC

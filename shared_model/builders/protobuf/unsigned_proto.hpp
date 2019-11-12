@@ -57,7 +57,7 @@ namespace shared_model {
        * @return signed object
        */
       UnsignedWrapper &signAndAddSignature(const crypto::Keypair &keypair) {
-        auto signedBlob = shared_model::crypto::CryptoSigner<>::sign(
+        auto signedBlob = shared_model::crypto::CryptoSigner::sign(
             shared_model::crypto::Blob(object_.payload()), keypair);
         if (object_finalized_) {
           throw std::runtime_error("object has already been finalized");

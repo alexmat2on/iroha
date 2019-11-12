@@ -20,7 +20,6 @@ namespace shared_model {
      * cryptographic algorithms
      * @tparam Algorithm - cryptographic algorithm for singing
      */
-    template <typename Algorithm = DefaultCryptoAlgorithmType>
     class CryptoSigner {
      public:
       /**

@@ -95,7 +95,7 @@ class TransactionProcessorTest : public ::testing::Test {
   auto addSignaturesFromKeyPairs(Transaction &&tx, KeyPairs... keypairs) {
     auto create_signature = [&](auto &&key_pair) {
       auto &payload = tx.payload();
-      auto signedBlob = shared_model::crypto::CryptoSigner<>::sign(
+      auto signedBlob = shared_model::crypto::CryptoSigner::sign(
           shared_model::crypto::Blob(payload), key_pair);
       tx.addSignature(signedBlob, key_pair.publicKey());
     };

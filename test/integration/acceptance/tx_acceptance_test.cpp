@@ -163,7 +163,7 @@ TEST_F(AcceptanceTest, TransactionEmptyPubKey) {
   shared_model::proto::Transaction tx =
       baseTx<TestTransactionBuilder>().build();
 
-  auto signedBlob = shared_model::crypto::CryptoSigner<>::sign(
+  auto signedBlob = shared_model::crypto::CryptoSigner::sign(
       shared_model::crypto::Blob(tx.payload()), kAdminKeypair);
   tx.addSignature(signedBlob, shared_model::crypto::PublicKey(""));
   integration_framework::IntegrationTestFramework(1)
@@ -199,7 +199,7 @@ TEST_F(AcceptanceTest, TransactionEmptySignedblob) {
 TEST_F(AcceptanceTest, TransactionInvalidPublicKey) {
   shared_model::proto::Transaction tx =
       baseTx<TestTransactionBuilder>().build();
-  auto signedBlob = shared_model::crypto::CryptoSigner<>::sign(
+  auto signedBlob = shared_model::crypto::CryptoSigner::sign(
       shared_model::crypto::Blob(tx.payload()), kAdminKeypair);
   tx.addSignature(
       signedBlob,
@@ -222,7 +222,7 @@ TEST_F(AcceptanceTest, TransactionInvalidSignedBlob) {
   shared_model::proto::Transaction tx =
       baseTx<TestTransactionBuilder>().build();
 
-  auto signedBlob = shared_model::crypto::CryptoSigner<>::sign(
+  auto signedBlob = shared_model::crypto::CryptoSigner::sign(
       shared_model::crypto::Blob(tx.payload()), kAdminKeypair);
   auto raw = signedBlob.blob();
   raw[0] = (raw[0] == std::numeric_limits<uint8_t>::max() ? 0 : raw[0] + 1);
