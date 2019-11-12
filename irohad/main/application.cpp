@@ -234,8 +234,7 @@ Irohad::RunResult Irohad::initStorage(
   // TODO: luckychess IR-308 05.08.2019 stateless validation for genesis block
   auto block_transport_factory =
       std::make_shared<shared_model::proto::ProtoBlockFactory>(
-          std::make_unique<shared_model::validation::AlwaysValidValidator<
-              shared_model::interface::Block>>(),
+          std::make_unique<shared_model::validation::DefaultUnsignedBlockValidator>(block_validators_config_),
           std::make_unique<shared_model::validation::ProtoBlockValidator>());
 
   boost::optional<std::string> string_res = boost::none;
