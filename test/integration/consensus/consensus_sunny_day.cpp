@@ -46,7 +46,8 @@ auto mk_local_peer(uint64_t num) {
 
 class FixedCryptoProvider : public MockYacCryptoProvider {
  public:
-  explicit FixedCryptoProvider(const std::string &public_key) : pubkey{padPubKeyString(public_key)}, data{""} { }
+  explicit FixedCryptoProvider(const std::string &public_key)
+      : pubkey{padPubKeyString(public_key)}, data{""} {}
 
   VoteMessage getVote(YacHash hash) override {
     auto vote = MockYacCryptoProvider::getVote(hash);

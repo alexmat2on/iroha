@@ -9,9 +9,9 @@
 #include <string>
 #include <vector>
 
-#include "multihash/multihash.hpp"
 #include "common/cloneable.hpp"
 #include "interfaces/base/model_primitive.hpp"
+#include "multihash/multihash.hpp"
 
 namespace shared_model {
   namespace crypto {

@@ -80,7 +80,7 @@ namespace iroha {
                    boost::algorithm::join(
                        order.getPeers()
                            | boost::adaptors::transformed(
-                                 [](const auto &p) { return p->address(); }),
+                               [](const auto &p) { return p->address(); }),
                        ", "));
 
         std::unique_lock<std::mutex> lock(mutex_);
@@ -193,9 +193,7 @@ namespace iroha {
 
         const auto &current_leader = cluster_order.currentLeader();
 
-        log_->info("Vote {} to peer {}",
-                   vote,
-                   current_leader);
+        log_->info("Vote {} to peer {}", vote, current_leader);
 
         network_->sendState(current_leader, {vote});
         cluster_order.switchToNext();

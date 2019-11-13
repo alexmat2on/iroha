@@ -24,7 +24,6 @@ namespace shared_model {
       static PublicKey fromHexString(const std::string &hex);
 
       std::string toString() const;
-
     };
   }  // namespace crypto
 }  // namespace shared_model

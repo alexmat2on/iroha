@@ -25,7 +25,6 @@ namespace shared_model {
       static Signed fromHexString(const std::string &hex);
 
       std::string toString() const;
-
     };
   }  // namespace crypto
 }  // namespace shared_model
