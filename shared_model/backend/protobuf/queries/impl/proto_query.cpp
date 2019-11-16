@@ -124,7 +124,7 @@ namespace shared_model {
 
       auto sig = impl_->proto_.mutable_signature();
       sig->set_signature(signed_blob.hex());
-      sig->set_public_key(public_key.toHex());
+      sig->set_public_key(public_key.hex());
 
       impl_->signatures_ =
           SignatureSetType<proto::Signature>{proto::Signature{*sig}};

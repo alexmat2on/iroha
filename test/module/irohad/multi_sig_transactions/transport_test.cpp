@@ -164,7 +164,7 @@ TEST_F(TransportTest, SendAndReceive) {
       .WillOnce(Invoke(
           [this, &state](const auto &from_key, auto const &target_state) {
             EXPECT_EQ(this->my_key_.publicKey(), from_key)
-                << this->my_key_.publicKey().toHex() << " " << from_key.toHex();
+                << this->my_key_.publicKey().hex() << " " << from_key.hex();
             EXPECT_TRUE(statesEqual(state, target_state));
           }));
 

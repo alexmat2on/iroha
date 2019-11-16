@@ -64,7 +64,7 @@ TEST(ProtoQueryBuilder, Builder) {
       keypair);
 
   auto sig = proto_query.mutable_signature();
-  sig->set_public_key(keypair.publicKey().toHex());
+  sig->set_public_key(keypair.publicKey().hex());
   sig->set_signature(signedProto.hex());
 
   auto query = shared_model::proto::QueryBuilder()

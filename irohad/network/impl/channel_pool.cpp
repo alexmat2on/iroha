@@ -8,6 +8,7 @@
 #include <shared_mutex>
 #include <unordered_map>
 
+#include "cryptography/blob_hasher.hpp"
 #include "cryptography/public_key.hpp"
 #include "interfaces/common_objects/peer.hpp"
 #include "interfaces/common_objects/types.hpp"
@@ -45,7 +46,7 @@ class ChannelPool::Impl {
   std::shared_timed_mutex mutex_;
   std::unordered_map<shared_model::crypto::PublicKey,
                      std::shared_ptr<grpc::Channel>,
-                     std::hash<libp2p::multi::Multihash>>
+                     shared_model::crypto::BlobHasher>
       channels_;
 };
 

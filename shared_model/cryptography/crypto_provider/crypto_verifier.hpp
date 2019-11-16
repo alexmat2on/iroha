@@ -34,15 +34,21 @@ namespace shared_model {
       static bool verify(const Signed &signedData,
                          const Blob &source,
                          const PublicKey &pubKey) {
-        const auto pub_key_type = pubKey.getType();
-
-        if (pub_key_type == libp2p::multi::HashType::ed25519pubsha3) {
+        if (pubKey.blob().size()
+            == shared_model::crypto::CryptoProviderEd25519Sha3::
+                   kPublicKeyLength) {
           return CryptoProviderEd25519Sha3::verify(signedData, source, pubKey);
-        } else if (pub_key_type == libp2p::multi::HashType::ed25519pubsha2) {
-          return CryptoProviderEd25519Ursa::verify(signedData, source, pubKey);
-        } else {
-          return false;
+        } else if (auto opt_multihash = iroha::expected::resultToOptionalValue(
+                       libp2p::multi::Multihash::createFromBuffer(
+                           kagome::common::Buffer{pubKey.blob()}))) {
+          if (opt_multihash->getType()
+              == libp2p::multi::HashType::ed25519pubsha2) {
+            return CryptoProviderEd25519Ursa::verify(
+                signedData, source, pubKey);
+          }
         }
+
+        return false;
       }
 
       /// close constructor for forbidding instantiation

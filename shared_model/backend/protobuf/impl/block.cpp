@@ -105,7 +105,7 @@ namespace shared_model {
 
       auto sig = impl_->proto_.add_signatures();
       sig->set_signature(signed_blob.hex());
-      sig->set_public_key(public_key.toHex());
+      sig->set_public_key(public_key.hex());
 
       impl_->signatures_ = [this] {
         auto signatures = *impl_->proto_.mutable_signatures()

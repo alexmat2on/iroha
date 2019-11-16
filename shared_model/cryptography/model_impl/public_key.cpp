@@ -4,32 +4,22 @@
  */
 
 #include "cryptography/public_key.hpp"
-#include "common/byteutils.hpp"
-#include "multihash/hash_type.hpp"
+
+#include "utils/string_builder.hpp"
 
 namespace shared_model {
   namespace crypto {
 
-    PublicKey::PublicKey(const std::string &public_key)
-        : MultiBase(libp2p::multi::HashType::ed25519pubsha3, public_key) {}
+    PublicKey::PublicKey(const std::string &public_key) : Blob(public_key) {}
 
-    PublicKey::PublicKey(const Blob::Bytes &blob)
-        : MultiBase(libp2p::multi::HashType::ed25519pubsha3, blob) {}
+    PublicKey::PublicKey(const Bytes &blob) : Blob(blob) {}
 
-    PublicKey::PublicKey(const Blob &blob)
-        : MultiBase(libp2p::multi::HashType::ed25519pubsha3, blob) {}
-
-    PublicKey PublicKey::fromHexString(const std::string &hex) {
-      using iroha::operator|;
-      PublicKey b("");
-      iroha::hexstringToBytestring(hex) | [&](auto &&s) { b = PublicKey(s); };
-      return b;
-    }
+    PublicKey::PublicKey(const Blob &blob) : Blob(blob.blob()) {}
 
     std::string PublicKey::toString() const {
       return detail::PrettyStringBuilder()
           .init("PublicKey")
-          .append(libp2p::multi::Multihash::toHex())
+          .append(Blob::hex())
           .finalize();
     }
 
