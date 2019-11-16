@@ -20,14 +20,10 @@ namespace shared_model {
     MultiBase::MultiBase(libp2p::multi::HashType hash_type,
                          const Blob::Bytes &multi_blob)
         : libp2p::multi::Multihash([&] {
-            if (!((hash_type == libp2p::multi::HashType::ed25519pubsha3
-                   && multi_blob.size()
-                       == shared_model::crypto::CryptoProviderEd25519Sha3::
-                              kPublicKeyLength)
-                  || (hash_type == libp2p::multi::HashType::ed25519sigsha3
-                      && multi_blob.size()
-                          == shared_model::crypto::CryptoProviderEd25519Sha3::
-                                 kSignatureLength))) {
+            if (!(hash_type == libp2p::multi::HashType::ed25519pubsha3
+                  && multi_blob.size()
+                      == shared_model::crypto::CryptoProviderEd25519Sha3::
+                             kPublicKeyLength)) {
               auto result = iroha::expected::resultToOptionalValue(
                   libp2p::multi::Multihash::createFromBuffer(
                       kagome::common::Buffer{multi_blob}));

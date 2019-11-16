@@ -35,13 +35,10 @@ namespace shared_model {
                          const Blob &source,
                          const PublicKey &pubKey) {
         const auto pub_key_type = pubKey.getType();
-        const auto signed_type = signedData.getType();
 
-        if (pub_key_type == libp2p::multi::HashType::ed25519pubsha3
-            && signed_type == libp2p::multi::HashType::ed25519sigsha3) {
+        if (pub_key_type == libp2p::multi::HashType::ed25519pubsha3) {
           return CryptoProviderEd25519Sha3::verify(signedData, source, pubKey);
-        } else if (pub_key_type == libp2p::multi::HashType::ed25519pubsha2
-                   && signed_type == libp2p::multi::HashType::ed25519sigsha2) {
+        } else if (pub_key_type == libp2p::multi::HashType::ed25519pubsha2) {
           return CryptoProviderEd25519Ursa::verify(signedData, source, pubKey);
         } else {
           return false;

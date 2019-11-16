@@ -19,8 +19,6 @@ namespace libp2p {
       blake2s256 = 0xb260,
       ed25519pubsha2 = 0xed13,
       ed25519pubsha3 = 0xed14,
-      ed25519sigsha2 = 0xef13,
-      ed25519sigsha3 = 0xef14
     };
   }  // namespace multi
 }  // namespace libp2p

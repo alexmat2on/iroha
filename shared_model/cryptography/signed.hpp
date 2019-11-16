@@ -6,7 +6,7 @@
 #ifndef IROHA_SHARED_MODEL_SIGNED_HPP
 #define IROHA_SHARED_MODEL_SIGNED_HPP
 
-#include "cryptography/multi_base.hpp"
+#include "cryptography/blob.hpp"
 
 namespace shared_model {
   namespace crypto {
@@ -14,17 +14,15 @@ namespace shared_model {
      * Class for storing signed data. It could be used not only for storing
      * signed hashes but for other signed objects too.
      */
-    class Signed : public MultiBase {
+    class Signed : public Blob {
      public:
       explicit Signed(const std::string &blob);
 
-      explicit Signed(const Blob::Bytes &blob);
+      explicit Signed(const Bytes &blob);
 
       explicit Signed(const Blob &blob);
 
-      static Signed fromHexString(const std::string &hex);
-
-      std::string toString() const;
+      std::string toString() const override;
     };
   }  // namespace crypto
 }  // namespace shared_model

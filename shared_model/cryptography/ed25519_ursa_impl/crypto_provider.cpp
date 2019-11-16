@@ -28,16 +28,8 @@ namespace shared_model {
         return Signed{""};
       }
 
-      std::string multi_blob{(const std::string::value_type *)signature.data,
-                             signature.len};
-
-      auto mh_signature = *iroha::expected::resultToOptionalValue(
-          libp2p::multi::Multihash::create(
-              libp2p::multi::HashType::ed25519sigsha2,
-              kagome::common::Buffer{
-                  std::vector<uint8_t>{multi_blob.begin(), multi_blob.end()}}));
-
-      Signed result(mh_signature.toBuffer().toVector());
+      Signed result(
+          {(const std::string::value_type *)signature.data, signature.len});
 
       ursa_ed25519_bytebuffer_free(signature);
       return result;

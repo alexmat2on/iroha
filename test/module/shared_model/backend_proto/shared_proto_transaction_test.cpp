@@ -67,7 +67,7 @@ TEST(ProtoTransaction, Builder) {
 
   auto sig = proto_tx.add_signatures();
   sig->set_public_key(keypair.publicKey().toHex());
-  sig->set_signature(signedProto.toHex());
+  sig->set_signature(signedProto.hex());
 
   auto tx = shared_model::proto::TransactionBuilder()
                 .creatorAccountId(creator_account_id)
