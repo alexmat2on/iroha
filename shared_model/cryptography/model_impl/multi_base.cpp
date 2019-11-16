@@ -23,11 +23,11 @@ namespace shared_model {
             if (!((hash_type == libp2p::multi::HashType::ed25519pubsha3
                    && multi_blob.size()
                        == shared_model::crypto::CryptoProviderEd25519Sha3::
-                           kPublicKeyLength)
+                              kPublicKeyLength)
                   || (hash_type == libp2p::multi::HashType::ed25519sigsha3
                       && multi_blob.size()
                           == shared_model::crypto::CryptoProviderEd25519Sha3::
-                              kSignatureLength))) {
+                                 kSignatureLength))) {
               auto result = iroha::expected::resultToOptionalValue(
                   libp2p::multi::Multihash::createFromBuffer(
                       kagome::common::Buffer{multi_blob}));

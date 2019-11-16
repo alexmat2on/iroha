@@ -39,7 +39,7 @@ namespace shared_model {
       SignatureSetType<proto::Signature> signatures_{[this] {
         auto signatures = *proto_.mutable_signatures()
             | boost::adaptors::transformed(
-                [](auto &x) { return proto::Signature(x); });
+                  [](auto &x) { return proto::Signature(x); });
         return SignatureSetType<proto::Signature>(signatures.begin(),
                                                   signatures.end());
       }()};
@@ -110,7 +110,7 @@ namespace shared_model {
       impl_->signatures_ = [this] {
         auto signatures = *impl_->proto_.mutable_signatures()
             | boost::adaptors::transformed(
-                [](auto &x) { return proto::Signature(x); });
+                  [](auto &x) { return proto::Signature(x); });
         return SignatureSetType<proto::Signature>(signatures.begin(),
                                                   signatures.end());
       }();

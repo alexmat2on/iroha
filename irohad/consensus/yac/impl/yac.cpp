@@ -80,7 +80,7 @@ namespace iroha {
                    boost::algorithm::join(
                        order.getPeers()
                            | boost::adaptors::transformed(
-                               [](const auto &p) { return p->address(); }),
+                                 [](const auto &p) { return p->address(); }),
                        ", "));
 
         std::unique_lock<std::mutex> lock(mutex_);
