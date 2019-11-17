@@ -47,9 +47,13 @@ namespace shared_model {
           (int64_t)signed_data.blob().size(),
           const_cast<uint8_t *>(signed_data.blob().data())};
 
+      if (public_key.blob().size() != kPublicKeyLength + 4) {
+        return false;
+      }
+
       const ByteBuffer kPublicKey = {
-          (int64_t)public_key.blob().size(),
-          const_cast<uint8_t *>(public_key.blob().data())};
+          (int64_t)public_key.blob().size() - 4,
+          const_cast<uint8_t *>(public_key.blob().data()) + 4};
 
       if (!ursa_ed25519_verify(&kMessage, &kSignature, &kPublicKey, &err)) {
         // handle error

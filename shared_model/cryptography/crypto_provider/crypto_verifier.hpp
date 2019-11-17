@@ -6,7 +6,6 @@
 #ifndef IROHA_CRYPTO_VERIFIER_HPP
 #define IROHA_CRYPTO_VERIFIER_HPP
 
-#include "cryptography/crypto_provider/crypto_defaults.hpp"
 #include "cryptography/ed25519_sha3_impl/crypto_provider.hpp"
 #include "cryptography/ed25519_ursa_impl/crypto_provider.hpp"
 
