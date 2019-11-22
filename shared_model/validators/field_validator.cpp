@@ -12,12 +12,15 @@
 #include <boost/format.hpp>
 #include "common/bind.hpp"
 #include "cryptography/crypto_provider/crypto_verifier.hpp"
+#include "cryptography/ed25519_sha3_impl/crypto_provider.hpp"
+#include "cryptography/ed25519_ursa_impl/crypto_provider.hpp"
 #include "interfaces/common_objects/amount.hpp"
 #include "interfaces/common_objects/peer.hpp"
 #include "interfaces/queries/account_detail_pagination_meta.hpp"
 #include "interfaces/queries/asset_pagination_meta.hpp"
 #include "interfaces/queries/query_payload_meta.hpp"
 #include "interfaces/queries/tx_pagination_meta.hpp"
+#include "multihash/multihash.hpp"
 #include "validators/field_validator.hpp"
 
 // TODO: 15.02.18 nickaleks Change structure to compositional IR-978
@@ -376,8 +379,10 @@ namespace shared_model {
       } else if (auto opt_multihash = iroha::expected::resultToOptionalValue(
                      libp2p::multi::Multihash::createFromBuffer(
                          kagome::common::Buffer{pubkey.blob()}))) {
-        if (opt_multihash->getType()
-            == libp2p::multi::HashType::ed25519pubsha2) {
+        if (opt_multihash->getType() == libp2p::multi::HashType::ed25519pub
+            && opt_multihash->getHash().size()
+                == shared_model::crypto::CryptoProviderEd25519Ursa::
+                       kPublicKeyLength) {
           return boost::none;
         }
       }

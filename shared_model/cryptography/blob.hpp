@@ -11,14 +11,12 @@
 
 #include "common/cloneable.hpp"
 #include "interfaces/base/model_primitive.hpp"
-#include "multihash/multihash.hpp"
 
 namespace shared_model {
   namespace crypto {
 
     class Blob;
     std::string toBinaryString(const Blob &b);
-    std::string toBinaryString(const libp2p::multi::Multihash &mh);
 
     /**
      * Blob class present user-friendly blob for working with low-level
@@ -80,7 +78,6 @@ namespace shared_model {
       std::string hex_;
     };
 
-    std::string toBinaryString(const Blob::Bytes &b);
   }  // namespace crypto
 }  // namespace shared_model
 #endif  // IROHA_SHARED_MODEL_BLOB_HPP

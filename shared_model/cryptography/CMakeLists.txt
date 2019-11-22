@@ -10,7 +10,9 @@ add_subdirectory(model_impl)
 add_subdirectory(ed25519_sha3_impl)
 add_subdirectory(ed25519_ursa_impl)
 
-add_library(shared_model_cryptography INTERFACE)
+add_library(shared_model_cryptography
+  crypto_provider/crypto_verifier.cpp
+  )
 
 if (USE_LIBURSA)
   set(DEFAULT_CRYPTO_PROVIDER CryptoProviderEd25519Ursa)
@@ -20,7 +22,8 @@ else()
   set(DEFAULT_CRYPTO_INCLUDE "cryptography/ed25519_sha3_impl/crypto_provider.hpp")
 endif()
 
-target_link_libraries(shared_model_cryptography INTERFACE
+target_link_libraries(shared_model_cryptography
+  multihash
   ursa_cryptography
   sha3_cryptography
 )

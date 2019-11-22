@@ -14,14 +14,6 @@ namespace shared_model {
       return std::string(b.blob().begin(), b.blob().end());
     }
 
-    std::string toBinaryString(const Blob::Bytes &b) {
-      return std::string(b.begin(), b.end());
-    }
-
-    std::string toBinaryString(const libp2p::multi::Multihash &mh) {
-      return mh.toBuffer().toByteString();
-    }
-
     Blob::Blob(const std::string &blob)
         : Blob(Bytes(blob.begin(), blob.end())) {}
 

@@ -5,6 +5,7 @@
 
 #include "cryptography/ed25519_ursa_impl/crypto_provider.hpp"
 
+#include "multihash/multihash.hpp"
 #include "ursa_crypto.h"
 
 namespace shared_model {
@@ -47,13 +48,14 @@ namespace shared_model {
           (int64_t)signed_data.blob().size(),
           const_cast<uint8_t *>(signed_data.blob().data())};
 
-      if (public_key.blob().size() != kPublicKeyLength + 4) {
+      // 3 here and below - 1 byte for type, 2 bytes for length in multihash
+      if (public_key.blob().size() != kPublicKeyLength + 3) {
         return false;
       }
 
       const ByteBuffer kPublicKey = {
-          (int64_t)public_key.blob().size() - 4,
-          const_cast<uint8_t *>(public_key.blob().data()) + 4};
+          (int64_t)public_key.blob().size() - 3,
+          const_cast<uint8_t *>(public_key.blob().data()) + 3};
 
       if (!ursa_ed25519_verify(&kMessage, &kSignature, &kPublicKey, &err)) {
         // handle error
@@ -80,7 +82,7 @@ namespace shared_model {
 
       auto mh_pubkey = *iroha::expected::resultToOptionalValue(
           libp2p::multi::Multihash::create(
-              libp2p::multi::HashType::ed25519pubsha2,
+              libp2p::multi::HashType::ed25519pub,
               kagome::common::Buffer{
                   std::vector<uint8_t>{multi_blob.begin(), multi_blob.end()}}));
 
@@ -115,7 +117,7 @@ namespace shared_model {
 
       auto mh_pubkey = *iroha::expected::resultToOptionalValue(
           libp2p::multi::Multihash::create(
-              libp2p::multi::HashType::ed25519pubsha2,
+              libp2p::multi::HashType::ed25519pub,
               kagome::common::Buffer{
                   std::vector<uint8_t>{multi_blob.begin(), multi_blob.end()}}));
 
@@ -131,10 +133,10 @@ namespace shared_model {
 
     // Ursa provides functions for retrieving key lengths, but we use hardcoded
     // values
-    const size_t CryptoProviderEd25519Ursa::kHashLength = 256 / 8;
-    const size_t CryptoProviderEd25519Ursa::kPublicKeyLength = 256 / 8;
-    const size_t CryptoProviderEd25519Ursa::kPrivateKeyLength = 512 / 8;
-    const size_t CryptoProviderEd25519Ursa::kSignatureLength = 512 / 8;
+    constexpr size_t CryptoProviderEd25519Ursa::kHashLength;
+    constexpr size_t CryptoProviderEd25519Ursa::kPublicKeyLength;
+    constexpr size_t CryptoProviderEd25519Ursa::kPrivateKeyLength;
+    constexpr size_t CryptoProviderEd25519Ursa::kSignatureLength;
 
   }  // namespace crypto
 }  // namespace shared_model
