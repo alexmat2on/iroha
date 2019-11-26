@@ -53,6 +53,7 @@ namespace shared_model {
 
       // Ursa provides functions for retrieving key lengths, but we use
       // hardcoded values
+      static const std::string kIdentifier;
       static constexpr size_t kHashLength = 256 / 8;
       static constexpr size_t kPublicKeyLength = 256 / 8;
       static constexpr size_t kPrivateKeyLength = 512 / 8;

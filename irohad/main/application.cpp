@@ -442,17 +442,6 @@ Irohad::RunResult Irohad::initPeerCertProvider() {
 Irohad::RunResult Irohad::initCryptoProvider() {
   crypto_signer_ = std::make_shared<shared_model::crypto::CryptoModelSigner<>>(keypair);
 
-  // if (!crypto_algorithm_type_ || crypto_algorithm_type_.value() == "iroha") {
-  //   crypto_signer_ =
-  //       std::make_shared<shared_model::crypto::CryptoModelSigner<>>(keypair);
-  // } else if (crypto_algorithm_type_.value() == "ursa") {
-  //   crypto_signer_ =
-  //       std::make_shared<shared_model::crypto::CryptoModelSigner<shared_model::crypto::CryptoSigner<shared_model::crypto::CryptoProviderEd25519Ursa>>>(keypair);
-  // } else {
-  //   return iroha::expected::makeError<std::string>(
-  //       "Unknown crypto algorithm type.");
-  // }
-
   log_->info("[Init] => crypto provider");
   return {};
 }

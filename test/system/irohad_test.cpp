@@ -105,6 +105,8 @@ class IrohadTest : public AcceptanceFixture {
         .GetObject()[config_members::KeyPairPath]
         .SetString(path_tls_keypair_.string().data(),
                    path_tls_keypair_.string().size());
+    std::string algorithm_type = DefaultCryptoAlgorithmType::kIdentifier;
+    doc[config_members::CryptoAlgorithmType].SetString(algorithm_type.data(), algorithm_type.size());
     rapidjson::StringBuffer sb;
     rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(sb);
     doc.Accept(writer);

@@ -61,6 +61,7 @@ namespace shared_model {
        */
       static Keypair generateKeypair(const Seed &seed);
 
+      static const std::string kIdentifier;
       static constexpr size_t kHashLength = 256 / 8;
       static constexpr size_t kPublicKeyLength = 256 / 8;
       static constexpr size_t kPrivateKeyLength = 256 / 8;

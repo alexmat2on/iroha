@@ -43,6 +43,7 @@ namespace shared_model {
                      PrivateKey(keypair.privkey.to_string()));
     }
 
+    const std::string CryptoProviderEd25519Sha3::kIdentifier = "iroha";
     constexpr size_t CryptoProviderEd25519Sha3::kHashLength;
     constexpr size_t CryptoProviderEd25519Sha3::kPublicKeyLength;
     constexpr size_t CryptoProviderEd25519Sha3::kPrivateKeyLength;
