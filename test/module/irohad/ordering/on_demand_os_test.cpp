@@ -10,6 +10,7 @@
 #include <gtest/gtest.h>
 #include "backend/protobuf/proto_proposal_factory.hpp"
 #include "builders/protobuf/transaction.hpp"
+#include "cryptography/crypto_provider/crypto_defaults.hpp"
 #include "datetime/time.hpp"
 #include "framework/test_logger.hpp"
 #include "interfaces/iroha_internal/transaction_batch_impl.hpp"

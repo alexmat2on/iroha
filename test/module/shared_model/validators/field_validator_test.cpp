@@ -22,6 +22,7 @@
 #include "backend/protobuf/queries/proto_tx_pagination_meta.hpp"
 #include "builders/protobuf/queries.hpp"
 #include "builders/protobuf/transaction.hpp"
+#include "cryptography/crypto_provider/crypto_defaults.hpp"
 #include "module/irohad/common/validators_config.hpp"
 #include "module/shared_model/validators/validators_fixture.hpp"
 #include "validators/field_validator.hpp"

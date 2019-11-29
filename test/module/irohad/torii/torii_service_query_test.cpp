@@ -11,6 +11,7 @@
 #include "backend/protobuf/query_responses/proto_block_query_response.hpp"
 #include "backend/protobuf/query_responses/proto_query_response.hpp"
 #include "builders/protobuf/queries.hpp"
+#include "cryptography/crypto_provider/crypto_defaults.hpp"
 #include "framework/test_logger.hpp"
 #include "main/server_runner.hpp"
 #include "module/irohad/common/validators_config.hpp"

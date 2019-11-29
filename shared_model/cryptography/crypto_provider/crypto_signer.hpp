@@ -7,11 +7,11 @@
 #define IROHA_CRYPTO_SIGNER_HPP
 
 #include "cryptography/blob.hpp"
-#include "cryptography/crypto_provider/crypto_defaults.hpp"
 #include "cryptography/ed25519_sha3_impl/crypto_provider.hpp"
 #include "cryptography/ed25519_ursa_impl/crypto_provider.hpp"
 #include "cryptography/keypair.hpp"
 #include "cryptography/signed.hpp"
+#include "multihash/multihash.hpp"
 
 namespace shared_model {
   namespace crypto {
@@ -29,18 +29,21 @@ namespace shared_model {
        * @return signature's blob
        */
       static Signed sign(const Blob &blob, const Keypair &keypair) {
-        const auto pub_key_type = keypair.publicKey().getType();
-
         if (
-          pub_key_type == libp2p::multi::HashType::ed25519pubsha3) {
+          keypair.publicKey().blob().size()
+      == shared_model::crypto::CryptoProviderEd25519Sha3::kPublicKeyLength) {
           return CryptoProviderEd25519Sha3::sign(blob, keypair);
-        } else if (
-          pub_key_type == libp2p::multi::HashType::ed25519pubsha2) {
+        } else if (auto opt_multihash = iroha::expected::resultToOptionalValue(
+                 libp2p::multi::Multihash::createFromBuffer(
+                     kagome::common::Buffer{keypair.publicKey().blob()}))) {
+		if (opt_multihash->getType() == libp2p::multi::HashType::ed25519pub
+        && opt_multihash->getHash().size()
+            == shared_model::crypto::CryptoProviderEd25519Ursa::
+                   kPublicKeyLength) {
           return CryptoProviderEd25519Ursa::sign(blob, keypair);
+    }
         }
-        else {
           return Signed{""};
-        }
       }
 
       /// close constructor for forbidding instantiation

@@ -8,6 +8,7 @@
 #include <gmock/gmock.h>
 #include <boost/range/adaptor/transformed.hpp>
 #include "backend/protobuf/block.hpp"
+#include "cryptography/crypto_provider/crypto_defaults.hpp"
 #include "framework/test_logger.hpp"
 #include "framework/test_subscriber.hpp"
 #include "module/irohad/ametsuchi/mock_block_query.hpp"

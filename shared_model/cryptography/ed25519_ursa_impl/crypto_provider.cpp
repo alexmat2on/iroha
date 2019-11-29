@@ -133,7 +133,7 @@ namespace shared_model {
 
     // Ursa provides functions for retrieving key lengths, but we use hardcoded
     // values
-    const std::string CryptoProviderEd25519Ursa::kIdentifier = "iroha";
+    const std::string CryptoProviderEd25519Ursa::kIdentifier = "ursa";
     constexpr size_t CryptoProviderEd25519Ursa::kHashLength;
     constexpr size_t CryptoProviderEd25519Ursa::kPublicKeyLength;
     constexpr size_t CryptoProviderEd25519Ursa::kPrivateKeyLength;

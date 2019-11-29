@@ -12,6 +12,7 @@
 #include "backend/protobuf/proto_block_factory.hpp"
 #include "backend/protobuf/transaction.hpp"
 #include "builders/protobuf/transaction.hpp"
+#include "cryptography/crypto_provider/crypto_defaults.hpp"
 #include "datetime/time.hpp"
 #include "framework/test_logger.hpp"
 #include "framework/test_subscriber.hpp"

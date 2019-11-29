@@ -7,6 +7,7 @@
 #include "logger/logger.hpp"
 
 #include "builders/protobuf/transaction.hpp"
+#include "cryptography/crypto_provider/crypto_defaults.hpp"
 #include "framework/test_logger.hpp"
 
 class TransactionFixture : public ::testing::Test {

@@ -8,6 +8,7 @@
 #include "backend/protobuf/proto_transport_factory.hpp"
 #include "backend/protobuf/query_responses/proto_query_response.hpp"
 #include "builders/protobuf/queries.hpp"
+#include "cryptography/crypto_provider/crypto_defaults.hpp"
 #include "framework/test_logger.hpp"
 #include "module/irohad/common/validators_config.hpp"
 #include "module/irohad/torii/processor/mock_query_processor.hpp"

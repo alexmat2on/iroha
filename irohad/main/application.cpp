@@ -22,6 +22,7 @@
 #include "backend/protobuf/proto_tx_status_factory.hpp"
 #include "common/bind.hpp"
 #include "consensus/yac/consistency_model.hpp"
+#include "cryptography/crypto_provider/crypto_defaults.hpp"
 #include "cryptography/crypto_provider/crypto_model_signer.hpp"
 #include "cryptography/ed25519_ursa_impl/crypto_provider.hpp"
 #include "generator/generator.hpp"
